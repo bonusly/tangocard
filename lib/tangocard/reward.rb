@@ -1,4 +1,3 @@
-# Documentation: https://github.com/tangocarddev/RaaS
 class Tangocard::Reward
   attr_reader :description, :sku, :currency_type, :unit_price, :available, :min_price, :max_price
 
@@ -45,14 +44,6 @@ class Tangocard::Reward
   end
 
   def price(field_name)
-    # Is this a variable-priced reward?
-    #
-    # Example:
-    #   >> reward.variable_price?
-    #   => true # reward is variable-priced
-    #
-    # Arguments:
-    #   none
     return nil unless [:min_price, :max_price, :unit_price].include?(field_name)
 
     Money.new(self.send(field_name), currency_type)
