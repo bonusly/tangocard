@@ -3,8 +3,6 @@ require 'httparty'
 require 'money'
 require 'ostruct'
 
-Dir["./lib/tangocard/*.rb"].each {|f| require f}
-
 module Tangocard
   class Configuration
     attr_accessor :name, :key, :base_uri, :default_brands, :local_images, :sku_blacklist
@@ -46,3 +44,5 @@ module Tangocard
     yield(configuration) if block_given?
   end
 end
+
+Dir["./lib/tangocard/*.rb"].each {|f| require f}
