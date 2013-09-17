@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe FundRecord do
+describe Tangocard::Order do
   include TangocardHelpers
 
   describe "class methods" do

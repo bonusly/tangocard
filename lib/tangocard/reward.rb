@@ -1,6 +1,6 @@
 # Documentation: https://github.com/tangocarddev/RaaS
 class Tangocard::Reward
-  include ActionView::Helpers::NumberHelper
+  #include ActionView::Helpers::NumberHelper
   attr_reader :description, :sku, :currency_type, :unit_price, :available, :min_price, :max_price
 
   def initialize(params)
@@ -27,9 +27,9 @@ class Tangocard::Reward
     end
   end
 
-  def display_price(field_name)
-    return nil unless [:min_price, :max_price, :unit_price].include?(field_name)
-
-    number_to_currency((self.send(field_name).to_f / 100.0), :unit => "$")
-  end
+  #def display_price(field_name)
+  #  return nil unless [:min_price, :max_price, :unit_price].include?(field_name)
+  #
+  #  number_to_currency((self.send(field_name).to_f / 100.0), :unit => "$")
+  #end
 end
