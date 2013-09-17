@@ -3,9 +3,7 @@ class Tangocard::Brand
   attr_reader :description, :rewards
 
   def self.all
-    result = Rails.cache.fetch("tangocard-brands") do
-      Tangocard::Raas.rewards_index.parsed_response
-    end
+    result = Tangocard::Raas.rewards_index.parsed_response
     result['brands'].map{|p| Tangocard::Brand.new(p)}
   end
 

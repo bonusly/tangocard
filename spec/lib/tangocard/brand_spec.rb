@@ -10,10 +10,6 @@ describe Tangocard::Brand do
           mock(Tangocard::Raas).rewards_index.mock!.parsed_response { sample_parsed_response }
         end
 
-        after do
-          Rails.cache.clear
-        end
-
         it "should return an array of Tangocard::Brand objects" do
           all_brands = Tangocard::Brand.all
           all_brands.should be_instance_of Array
@@ -28,16 +24,6 @@ describe Tangocard::Brand do
       end
 
       context "cached" do
-        before do
-          Rails.cache.fetch "tangocard-brands" do
-            sample_parsed_response
-          end
-        end
-
-        after do
-          Rails.cache.clear
-        end
-
         it "should not call Tangocard::Raas.rewards_index" do
           dont_allow(Tangocard::Raas).rewards_index
           Tangocard::Brand.all
