@@ -51,6 +51,6 @@ class Tangocard::Raas
   private
 
   def self.basic_auth_param
-    {:basic_auth => {:username => TANGOCARD::PLATFORM[:name], :password => TANGOCARD::PLATFORM[:key]}}
+    {:basic_auth => {:username => Tangocard.configuration.name, :password => Tangocard.configuration.key}}
   end
 end

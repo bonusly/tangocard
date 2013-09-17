@@ -47,14 +47,14 @@ describe Tangocard::Brand do
         end
       end
 
-      describe "display_price" do
+      describe "price_in_usd" do
         it "should return nil unless valid field name is given" do
-          @reward.display_price(:asdgasdga).should be_nil
+          @reward.price_in_usd(:asdgasdga).should be_nil
         end
 
         it "should properly format the unit_price" do
           mock(@reward).send(:unit_price) { cents }
-          @reward.display_price(:unit_price).should == "$5.00"
+          @reward.price_in_usd(:unit_price).should == "$5.00"
         end
       end
     end
@@ -102,17 +102,17 @@ describe Tangocard::Brand do
 
       describe "display_price" do
         it "should return nil unless valid field name is given" do
-          @reward.display_price(:asdgasdga).should be_nil
+          @reward.price_in_usd(:asdgasdga).should be_nil
         end
 
         it "should properly format the min_price" do
           mock(@reward).send(:min_price) { cents }
-          @reward.display_price(:min_price).should == "$5.00"
+          @reward.price_in_usd(:min_price).should == "$5.00"
         end
 
         it "should properly format the max_price" do
           mock(@reward).send(:max_price) { cents }
-          @reward.display_price(:max_price).should == "$5.00"
+          @reward.price_in_usd(:max_price).should == "$5.00"
         end
       end
     end

@@ -5,46 +5,27 @@ describe Tangocard::Brand do
 
   describe "class methods" do
     describe "self.all" do
-      context "uncached" do
-        before do
-          mock(Tangocard::Raas).rewards_index.mock!.parsed_response { sample_parsed_response }
-        end
-
-        it "should return an array of Tangocard::Brand objects" do
-          all_brands = Tangocard::Brand.all
-          all_brands.should be_instance_of Array
-          all_brands.map(&:class).uniq.count.should == 1
-          all_brands.map(&:class).uniq.first.should == Tangocard::Brand
-        end
-
-        it "should cache the result" do
-          Tangocard::Brand.all
-          Tangocard::Brand.all # 2nd call would fail due to mock above, unless caching is working
-        end
+      before do
+        mock(Tangocard::Raas).rewards_index.mock!.parsed_response { sample_parsed_response }
       end
 
-      context "cached" do
-        it "should not call Tangocard::Raas.rewards_index" do
-          dont_allow(Tangocard::Raas).rewards_index
-          Tangocard::Brand.all
-        end
-
-        it "should return an array of Tangocard::Brand objects" do
-          all_brands = Tangocard::Brand.all
-          all_brands.should be_instance_of Array
-          all_brands.map(&:class).uniq.count.should == 1
-          all_brands.map(&:class).uniq.first.should == Tangocard::Brand
-        end
+      it "should return an array of Tangocard::Brand objects" do
+        all_brands = Tangocard::Brand.all
+        all_brands.should be_instance_of Array
+        all_brands.map(&:class).uniq.count.should == 1
+        all_brands.map(&:class).uniq.first.should == Tangocard::Brand
       end
     end
 
     describe "self.default_brands" do
       before do
         stub(Tangocard::Raas).rewards_index.stub!.parsed_response { sample_parsed_response }
-        TANGOCARD::DEFAULT_BRANDS = ["Tango Card"]
+        Tangocard.configure do |c|
+          c.default_brands = ["Tango Card"]
+        end
       end
 
-      it "should return only brands matching TANGOCARD::DEFAULT_BRANDS" do
+      it "should return only brands matching Tangocard.configuration.default_brands" do
         Tangocard::Brand.default_brands.count.should == 1
         Tangocard::Brand.default_brands.first.description.should == "Tango Card"
       end
@@ -93,14 +74,14 @@ describe Tangocard::Brand do
     describe "image_url" do
       it "should return a local override image, if present" do
         stub(Tangocard::Reward).new(reward) { true }
-        stub(TANGOCARD::LOCAL_IMAGES).[](description) { "local" }
+        stub(Tangocard).configuration.stub!.local_images.stub!.[](description) { "local" }
         brand = Tangocard::Brand.new(params)
         brand.image_url.should == "local"
       end
 
       it "should return image_url if no local override image" do
         stub(Tangocard::Reward).new(reward) { true }
-        stub(TANGOCARD::LOCAL_IMAGES).[](description) { nil }
+        stub(Tangocard).configuration.stub!.local_images.stub!.[](description) { nil }
         brand = Tangocard::Brand.new(params)
         brand.image_url.should == image_url
       end

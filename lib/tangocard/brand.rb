@@ -8,7 +8,7 @@ class Tangocard::Brand
   end
 
   def self.default_brands
-    self.all.select{|b| TANGOCARD::DEFAULT_BRANDS.include?(b.description)}
+    self.all.select{|b| Tangocard.configuration.default_brands.include?(b.description)}
   end
 
   def self.find(brand_name)
@@ -23,11 +23,11 @@ class Tangocard::Brand
 
   # Some brands don't have logo images provided by the API, so we do this.
   def image_url
-    TANGOCARD::LOCAL_IMAGES[description] || @image_url
+    Tangocard.configuration.local_images[description] || @image_url
   end
 
   def purchasable_rewards(balance_in_cents)
-    rewards.select{|r| r.purchasable?(balance_in_cents) && !TANGOCARD::SKU_BLACKLIST.include?(r.sku)}
+    rewards.select{|r| r.purchasable?(balance_in_cents) && !Tangocard.configuration.sku_blacklist.include?(r.sku)}
   end
 
   def has_purchasable_rewards?(balance_in_cents)

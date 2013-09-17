@@ -17,6 +17,7 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
 
   s.add_dependency "httparty", "~> 0.11.0"
+  s.add_dependency "money", "~> 5.1.1"
   s.add_development_dependency "rspec"
   s.add_development_dependency "rr"
 end

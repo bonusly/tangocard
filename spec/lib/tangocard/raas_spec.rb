@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe Tangocard::Raas do
-  let(:name) { Object.new }
-  let(:key) { Object.new }
+  let(:name) { "name" }
+  let(:key) { "key" }
   let(:params) { Object.new }
   let(:json) { Object.new }
   let(:basic_auth_param) { {basic_auth: {username: name, password: key}} }
@@ -10,8 +10,10 @@ describe Tangocard::Raas do
   let(:response) { Object.new }
 
   before(:each) do
-    stub(TANGOCARD::PLATFORM).[](:name) { name }
-    stub(TANGOCARD::PLATFORM).[](:key) { key }
+    Tangocard.configure do |c|
+      c.name = name
+      c.key = key
+    end
   end
 
   describe "private methods" do
