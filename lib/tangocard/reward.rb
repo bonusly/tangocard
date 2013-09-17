@@ -29,6 +29,6 @@ class Tangocard::Reward
   def price_in_usd(field_name)
     return nil unless [:min_price, :max_price, :unit_price].include?(field_name)
 
-    Money.new(self.send(field_name), "USD")
+    Money.new(self.send(field_name), currency_type)
   end
 end
