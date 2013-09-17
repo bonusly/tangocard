@@ -11,28 +11,9 @@ module Tangocard
       self.name = nil
       self.key = nil
       self.base_uri = "https://sandbox.tangocard.com"
-      self.default_brands = [
-          'Tango Card',
-          'Amazon.com',
-          'Apple iTunes',
-          'Barnes & Noble',
-          'Best Buy',
-          'Facebook',
-          'Fandango',
-          'Gap',
-          'Grameen',
-          'Habitat for Humanity',
-          'Hulu+',
-          'Nike',
-          'REI',
-          'Sephora',
-          'Starbucks',
-          'Target',
-          'Walmart',
-          'Zappos'
-      ]
+      self.default_brands = ['Tango Card']
       self.local_images = {}
-      self.sku_blacklist = ["TNGO-C-V-STD"]
+      self.sku_blacklist = []
     end
   end
 
