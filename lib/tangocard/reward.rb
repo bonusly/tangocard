@@ -13,10 +13,28 @@ class Tangocard::Reward
   end
 
   def variable_price?
+    # Is this a variable-priced reward?
+    #
+    # Example:
+    #   >> reward.variable_price?
+    #   => true # reward is variable-priced
+    #
+    # Arguments:
+    #   none
     self.unit_price == -1
   end
 
   def purchasable?(balance_in_cents)
+    # Is this reward purchasable given a certain number of cents available to purchase it?
+    # True if reward is available and user has enough cents
+    # False if reward is unavailable OR user doesn't have enough cents
+    #
+    # Example:
+    #   >> reward.purchasable?(500)
+    #   => true # reward is available and costs <= 500 cents
+    #
+    # Arguments:
+    #   balance_in_cents: (Integer)
     return false unless available
 
     if variable_price?
@@ -26,7 +44,15 @@ class Tangocard::Reward
     end
   end
 
-  def price_in_usd(field_name)
+  def price(field_name)
+    # Is this a variable-priced reward?
+    #
+    # Example:
+    #   >> reward.variable_price?
+    #   => true # reward is variable-priced
+    #
+    # Arguments:
+    #   none
     return nil unless [:min_price, :max_price, :unit_price].include?(field_name)
 
     Money.new(self.send(field_name), currency_type)
