@@ -25,4 +25,13 @@ module Tangocard
   end
 end
 
-Dir["./lib/tangocard/*.rb"].each {|f| require f}
+require 'tangocard/response'
+require 'tangocard/raas'
+require 'tangocard/account'
+require 'tangocard/account_create_failed_exception'
+require 'tangocard/account_not_found_exception'
+require 'tangocard/brand'
+require 'tangocard/order'
+require 'tangocard/order_create_failed_exception'
+require 'tangocard/order_not_found_exception'
+require 'tangocard/reward'

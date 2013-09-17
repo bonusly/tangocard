@@ -100,7 +100,7 @@ describe Tangocard::Brand do
         end
       end
 
-      describe "display_price" do
+      describe "price_in_usd" do
         it "should return nil unless valid field name is given" do
           @reward.price_in_usd(:asdgasdga).should be_nil
         end
