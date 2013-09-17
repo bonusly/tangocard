@@ -1,0 +1,8 @@
+= Tangocard
+
+Ruby Wrapper for Tango Card RaaS API.
+
+Tango Card provides a RaaS API for developers (https://github.com/tangocarddev/RaaS). This gem provides commonsense Ruby
+objects to wrap the JSON endpoints of the RaaS API.
+
+This project is developed and maintained by Smartly, Inc., makers of bonus.ly (http://bonus.ly) and uses MIT-LICENSE.
