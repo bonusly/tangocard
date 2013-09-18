@@ -15,7 +15,7 @@ class Tangocard::Reward
   #
   # Example:
   #   >> reward.variable_price?
-  #   => true # reward is variable-priced
+  #    => true # reward is variable-priced
   #
   # Arguments:
   #   none
@@ -29,7 +29,7 @@ class Tangocard::Reward
   #
   # Example:
   #   >> reward.purchasable?(500)
-  #   => true # reward is available and costs <= 500 cents
+  #    => true # reward is available and costs <= 500 cents
   #
   # Arguments:
   #   balance_in_cents: (Integer)
@@ -43,7 +43,15 @@ class Tangocard::Reward
     end
   end
 
-  def price(field_name)
+  # Converts price in cents for given field to Money object using currency_type
+  #
+  # Example:
+  #   >> reward.to_money(:unit_price)
+  #    => #<Money fractional:5000 currency:USD>
+  #
+  # Arguments:
+  #   field_name: (Symbol - must be :min_price, :max_price, or :unit_price)
+  def to_money(field_name)
     return nil unless [:min_price, :max_price, :unit_price].include?(field_name)
 
     Money.new(self.send(field_name), currency_type)
