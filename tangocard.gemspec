@@ -14,7 +14,7 @@ Gem::Specification.new do |s|
   s.description = "Tango Card provides a RaaS API for developers (https://github.com/tangocarddev/RaaS). This gem
                    provides commonsense Ruby objects to wrap the JSON endpoints of the RaaS API."
 
-  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.rdoc"]
+  s.files = Dir["{app,config,db,lib}/**/*"] + ["MIT-LICENSE", "Rakefile", "README.md"]
 
   s.add_dependency "httparty", "~> 0.11.0"
   s.add_dependency "money", "~> 5.1.1"
