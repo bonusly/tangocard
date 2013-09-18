@@ -1,5 +1,3 @@
-# Tangocard RaaS Response Wrapper
-# https://github.com/tangocarddev/RaaS#responses
 class Tangocard::Response
   attr_reader :raw_response
 
