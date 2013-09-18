@@ -83,21 +83,22 @@ class Tangocard::Account
   #   credit_card: (Hash) - see https://github.com/tangocarddev/RaaS/blob/master/fund_create.schema.json for details
   #
   # Credit Card Hash Example:
-  # {
-  #     'number' => '4111111111111111',
-  #     'expiration' => '01/17',
-  #     'security_code' => '123',
-  #     'billing_address' => {
-  #         'f_name' => 'Jane',
-  #         'l_name' => 'User',
-  #         'address' => '123 Main Street',
-  #         'city' => 'Anytown',
-  #         'state' => 'NY',
-  #         'zip' => '11222',
-  #         'country' => 'USA',
-  #         'email' => 'jane@company.com'
-  #     }
-  # }
+  #
+  #   {
+  #       'number' => '4111111111111111',
+  #       'expiration' => '01/17',
+  #       'security_code' => '123',
+  #       'billing_address' => {
+  #           'f_name' => 'Jane',
+  #           'l_name' => 'User',
+  #           'address' => '123 Main Street',
+  #           'city' => 'Anytown',
+  #           'state' => 'NY',
+  #           'zip' => '11222',
+  #           'country' => 'USA',
+  #           'email' => 'jane@company.com'
+  #       }
+  #   }
   def fund!(amount, client_ip, credit_card)
     params = {
         'amount' => amount,
