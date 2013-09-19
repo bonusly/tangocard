@@ -16,8 +16,6 @@ objects to wrap the JSON endpoints of the RaaS API.
 
 ## Installation
 
-### Rails 3
-
 Add the `tangocard` gem to your `Gemfile`:
 
 ```
