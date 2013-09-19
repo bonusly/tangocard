@@ -40,8 +40,8 @@ There are three required configuration parameters:
 
 There are also three optional configuration parameters:
 
- * `default_brands` - An array of strings for the brands you want to retrieve with Tangocard::Brand.default_brands.  The strings should match the unique brand `description` fields exactly.
- * `local_images` - An array of local image names/URIs that you want to display instead of the default Tango Card-provided `image_url`.  `image_url` is sometimes blank, so this can be handy in those cases.
+ * `default_brands` - An array of strings for the brands you want to retrieve with `Tangocard::Brand.default_brands`. The strings should match the unique brand `description` fields exactly.
+ * `local_images` - An array of local image names/URIs that you want to display instead of the default Tango Card-provided `image_url`. `image_url` is sometimes blank, so this can be handy in those cases.
  * `sku_blacklist` - Reward SKUs that are blacklisted, ie. should never be returned as a purchasable reward.
 
 ## Getting Started
@@ -49,7 +49,7 @@ There are also three optional configuration parameters:
 This gem provides two tools:
 
 1. A simple wrapper for the Tango Card RaaS API, consisting of two classes: `Tangocard::Raas` and `Tangocard::Response`.
-2. Models for each of the Tango Card objects: Accounts, Brands, Rewards, and Orders.  These provide a greater level of abstraction and ease of use.
+2. Models for each of the Tango Card objects: `Tangocard::Account`, `Tangocard::Brand`, `Tangocard::Reward`, and `Tangocard::Order`. These provide a greater level of abstraction and ease of use.
 
 ## Notes and Credits
 
