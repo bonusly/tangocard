@@ -1,3 +1,4 @@
 0.1.0: Initial Release
 0.2.0: Change Tangocard::Reward#price_in_usd to #to_money, and use the :currency_type field.  Add a bunch of documentation.
 0.2.1: Fix some specs that slipped through the cracks.
+0.2.2: Fix critical bug in setting the base_uri for the API endpoint

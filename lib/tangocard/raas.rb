@@ -1,6 +1,5 @@
 class Tangocard::Raas
   include HTTParty
-  base_uri Tangocard.configuration.base_uri
 
   # Create a new account. Returns Tangocard::Response object.
   #
@@ -11,7 +10,7 @@ class Tangocard::Raas
   # Arguments:
   #   params: (Hash - see https://github.com/tangocarddev/RaaS#create-a-new-platform-account for details)
   def self.create_account(params)
-    Tangocard::Response.new(post('/raas/v1/accounts', {:body => params.to_json}.merge(basic_auth_param)))
+    Tangocard::Response.new(post(endpoint + 'accounts', {:body => params.to_json}.merge(basic_auth_param)))
   end
 
   # Gets account details. Returns Tangocard::Response object.
@@ -23,7 +22,7 @@ class Tangocard::Raas
   # Arguments:
   #   params: (Hash - see https://github.com/tangocarddev/RaaS#get-the-information-for-a-specific-platform-account for details)
   def self.show_account(params)
-    Tangocard::Response.new(get("/raas/v1/accounts/#{params['customer']}/#{params['identifier']}", basic_auth_param))
+    Tangocard::Response.new(get(endpoint + "/accounts/#{params['customer']}/#{params['identifier']}", basic_auth_param))
   end
 
   # Funds an account. Returns Tangocard::Response object.
@@ -35,7 +34,7 @@ class Tangocard::Raas
   # Arguments:
   #   params: (Hash - see https://github.com/tangocarddev/RaaS#fund-a-platforms-account for details)
   def self.fund_account(params)
-    Tangocard::Response.new(post('/raas/v1/funds', {:body => params.to_json}.merge(basic_auth_param)))
+    Tangocard::Response.new(post(endpoint + '/funds', {:body => params.to_json}.merge(basic_auth_param)))
   end
 
   # Retrieve all rewards. Returns Tangocard::Response object.
@@ -47,7 +46,7 @@ class Tangocard::Raas
   # Arguments:
   #   none
   def self.rewards_index
-    Tangocard::Response.new(get('/raas/v1/rewards', basic_auth_param))
+    Tangocard::Response.new(get(endpoint + '/rewards', basic_auth_param))
   end
 
   # Create an order. Returns Tangocard::Response object.
@@ -59,7 +58,7 @@ class Tangocard::Raas
   # Arguments:
   #   params: (Hash - see https://github.com/tangocarddev/RaaS#place-an-order for details)
   def self.create_order(params)
-    Tangocard::Response.new(post('/raas/v1/orders', {:body => params.to_json}.merge(basic_auth_param)))
+    Tangocard::Response.new(post(endpoint + '/orders', {:body => params.to_json}.merge(basic_auth_param)))
   end
 
   # Get order details. Returns Tangocard::Response object.
@@ -71,7 +70,7 @@ class Tangocard::Raas
   # Arguments:
   #   params: (Hash - see https://github.com/tangocarddev/RaaS#retrieve-a-historical-order for details)
   def self.show_order(params)
-    Tangocard::Response.new(get("/raas/v1/orders/#{params['order_id']}", basic_auth_param))
+    Tangocard::Response.new(get(endpoint + "/orders/#{params['order_id']}", basic_auth_param))
   end
 
   # Retrieve a list of historical orders. Returns Tangocard::Response object.
@@ -91,12 +90,16 @@ class Tangocard::Raas
         query_string += "#{k}=#{params[k]}"
       end
     end
-    Tangocard::Response.new(get("/raas/v1/orders#{query_string}", basic_auth_param))
+    Tangocard::Response.new(get(endpoint + "/orders#{query_string}", basic_auth_param))
   end
 
   private
 
   def self.basic_auth_param
     {:basic_auth => {:username => Tangocard.configuration.name, :password => Tangocard.configuration.key}}
+  end
+
+  def self.endpoint
+    Tangocard.configuration.base_uri + '/raas/v1'
   end
 end
