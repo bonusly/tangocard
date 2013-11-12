@@ -4,7 +4,7 @@ require 'ostruct'
 
 module Tangocard
   class Configuration
-    attr_accessor :name, :key, :base_uri, :default_brands, :local_images, :sku_blacklist
+    attr_accessor :name, :key, :base_uri, :default_brands, :local_images, :sku_blacklist, :use_cache
 
     def initialize
       self.name = nil
@@ -13,6 +13,7 @@ module Tangocard
       self.default_brands = ['Tango Card']
       self.local_images = {}
       self.sku_blacklist = []
+      self.use_cache = true
     end
   end
 

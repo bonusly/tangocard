@@ -14,6 +14,7 @@ describe Tangocard::Raas do
       c.name = name
       c.key = key
     end
+    @endpoint = Tangocard.configuration.base_uri + '/raas/v1'
   end
 
   describe "private methods" do
@@ -32,7 +33,7 @@ describe Tangocard::Raas do
     describe "self.create_account" do
       it "should POST to the RaaS API with appropriate params and wrap the result in a Tangocard::Response object" do
         mock(params).to_json { json }
-        mock(Tangocard::Raas).post('/raas/v1/accounts', {:body => json}.merge(basic_auth_param)) { raw_response }
+        mock(Tangocard::Raas).post(@endpoint + '/accounts', {:body => json}.merge(basic_auth_param)) { raw_response }
         Tangocard::Raas.create_account(params).should == response
       end
     end
@@ -41,7 +42,7 @@ describe Tangocard::Raas do
       it "should GET to the RaaS API with appropriate params and wrap the result in a Tangocard::Response object" do
         mock(params).[]('customer') { 'customer' }
         mock(params).[]('identifier') { 'identifier' }
-        mock(Tangocard::Raas).get("/raas/v1/accounts/customer/identifier", basic_auth_param) { raw_response }
+        mock(Tangocard::Raas).get(@endpoint + "/accounts/customer/identifier", basic_auth_param) { raw_response }
         Tangocard::Raas.show_account(params).should == response
       end
     end
@@ -49,22 +50,39 @@ describe Tangocard::Raas do
     describe "self.fund_account" do
       it "should POST to the RaaS API with appropriate params and wrap the result in a Tangocard::Response object" do
         mock(params).to_json { json }
-        mock(Tangocard::Raas).post('/raas/v1/funds', {body: json}.merge(basic_auth_param)) { raw_response }
+        mock(Tangocard::Raas).post(@endpoint + '/funds', {body: json}.merge(basic_auth_param)) { raw_response }
         Tangocard::Raas.fund_account(params).should == response
       end
     end
 
     describe "self.rewards_index" do
-      it "should GET to the RaaS API and wrap the result in a Tangocard::Response object" do
-        mock(Tangocard::Raas).get('/raas/v1/rewards', basic_auth_param) { raw_response }
-        Tangocard::Raas.rewards_index.should == response
+      context "use_cache == true" do
+        it "should do the GET request once, then hit cache" do
+          mock(Tangocard::Raas).get(@endpoint + '/rewards', basic_auth_param).times(1) { raw_response }
+          Tangocard::Raas.rewards_index.should == response
+          Tangocard::Raas.rewards_index.should == response
+        end
+      end
+
+      context "use_cache == false" do
+        before do
+          Tangocard.configure do |c|
+            c.use_cache = false
+          end
+        end
+
+        it "should do the GET request once, then hit cache" do
+          mock(Tangocard::Raas).get(@endpoint + '/rewards', basic_auth_param).times(2) { raw_response }
+          Tangocard::Raas.rewards_index.should == response
+          Tangocard::Raas.rewards_index.should == response
+        end
       end
     end
 
     describe "self.create_order" do
       it "should POST to the RaaS API with appropriate params and wrap the result in a Tangocard::Response object" do
         mock(params).to_json { json }
-        mock(Tangocard::Raas).post('/raas/v1/orders', {body: json}.merge(basic_auth_param)) { raw_response }
+        mock(Tangocard::Raas).post(@endpoint + '/orders', {body: json}.merge(basic_auth_param)) { raw_response }
         Tangocard::Raas.create_order(params).should == response
       end
     end
@@ -72,7 +90,7 @@ describe Tangocard::Raas do
     describe "self.show_order" do
       it "should GET to the RaaS API with appropriate params and wrap the result in a Tangocard::Response object" do
         mock(params).[]('order_id') { 'order_id' }
-        mock(Tangocard::Raas).get("/raas/v1/orders/order_id", basic_auth_param) { raw_response }
+        mock(Tangocard::Raas).get(@endpoint + "/orders/order_id", basic_auth_param) { raw_response }
         Tangocard::Raas.show_order(params).should == response
       end
     end
@@ -80,7 +98,7 @@ describe Tangocard::Raas do
     # Tangocard::Response.new(self.class.get("/raas/v1/orders#{query_string}", basic_auth_param))
     describe "self.orders_index" do
       it "should GET to the RaaS API with params converted into a query string and wrap the result in a Tangocard::Response object" do
-        mock(Tangocard::Raas).get("/raas/v1/orders?foo=bar", basic_auth_param) { raw_response }
+        mock(Tangocard::Raas).get(@endpoint + "/orders?foo=bar", basic_auth_param) { raw_response }
         Tangocard::Raas.orders_index({'foo' => 'bar'}).should == response
       end
     end

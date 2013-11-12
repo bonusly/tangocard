@@ -10,7 +10,7 @@ class Tangocard::Raas
   # Arguments:
   #   params: (Hash - see https://github.com/tangocarddev/RaaS#create-a-new-platform-account for details)
   def self.create_account(params)
-    Tangocard::Response.new(post(endpoint + 'accounts', {:body => params.to_json}.merge(basic_auth_param)))
+    Tangocard::Response.new(post(endpoint + '/accounts', {:body => params.to_json}.merge(basic_auth_param)))
   end
 
   # Gets account details. Returns Tangocard::Response object.
@@ -46,7 +46,11 @@ class Tangocard::Raas
   # Arguments:
   #   none
   def self.rewards_index
-    Tangocard::Response.new(get(endpoint + '/rewards', basic_auth_param))
+    if Tangocard.configuration.use_cache
+      @@rewards_response ||= Tangocard::Response.new(get(endpoint + '/rewards', basic_auth_param))
+    else
+      Tangocard::Response.new(get(endpoint + '/rewards', basic_auth_param))
+    end
   end
 
   # Create an order. Returns Tangocard::Response object.
@@ -91,6 +95,10 @@ class Tangocard::Raas
       end
     end
     Tangocard::Response.new(get(endpoint + "/orders#{query_string}", basic_auth_param))
+  end
+
+  def self.clear_cache!
+    @@rewards_response = nil
   end
 
   private
