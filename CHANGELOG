@@ -3,3 +3,4 @@
 0.2.1: Fix some specs that slipped through the cracks.
 0.2.2: Fix critical bug in setting the base_uri for the API endpoint
 1.0.0: Add use_cache to speed up rewards retrieval
+2.0.0: Performance improvements
