@@ -6,7 +6,7 @@ describe Tangocard::Brand do
   describe "class methods" do
     describe "self.all" do
       before do
-        mock(Tangocard::Raas).rewards_index.mock!.parsed_response { sample_parsed_response }
+        stub(Tangocard::Raas).rewards_index.stub!.parsed_response { sample_parsed_response }
       end
 
       it "should return an array of Tangocard::Brand objects" do

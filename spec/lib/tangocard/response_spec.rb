@@ -12,21 +12,8 @@ describe Tangocard::Response do
   end
 
   describe "inialize" do
-    it "should set the raw_response ivar on initialize" do
-      @response.raw_response.should == raw_response
-    end
-  end
-
-  describe "parsed_response" do
-    it "should return the parsed response from the raw_response" do
-      mock(raw_response).parsed_response { parsed_response }
+    it "should set the ivars on initialize" do
       @response.parsed_response.should == parsed_response
-    end
-  end
-
-  describe "code" do
-    it "should return the code from the raw_response" do
-      mock(raw_response).code { code }
       @response.code.should == code
     end
   end

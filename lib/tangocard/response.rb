@@ -1,16 +1,9 @@
 class Tangocard::Response
-  attr_reader :raw_response
+  attr_reader :parsed_response, :code
 
   def initialize(raw_response)
-    @raw_response = raw_response
-  end
-
-  def parsed_response
-    raw_response.parsed_response
-  end
-
-  def code
-    raw_response.code
+    @parsed_response = raw_response.parsed_response
+    @code = raw_response.code
   end
 
   def success?
