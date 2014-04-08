@@ -54,7 +54,7 @@ describe Tangocard::Brand do
 
         it "should properly format the unit_price" do
           mock(@reward).send(:unit_price) { cents }
-          @reward.to_money(:unit_price).should == "$5.00"
+          @reward.to_money(:unit_price).format.should == "$5.00"
         end
       end
     end
@@ -107,12 +107,12 @@ describe Tangocard::Brand do
 
         it "should properly format the min_price" do
           mock(@reward).send(:min_price) { cents }
-          @reward.to_money(:min_price).should == "$5.00"
+          @reward.to_money(:min_price).format.should == "$5.00"
         end
 
         it "should properly format the max_price" do
           mock(@reward).send(:max_price) { cents }
-          @reward.to_money(:max_price).should == "$5.00"
+          @reward.to_money(:max_price).format.should == "$5.00"
         end
       end
     end
