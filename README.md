@@ -36,7 +36,7 @@ There are three required configuration parameters:
 
  * `name` - The API account name you receive from Tango Card
  * `key` - The API account key you receive from Tango Card
- * `base_uri` - This defaults to the Tango Card sandbox.  For production, you must specify the base URI for the produciton RaaS API
+ * `base_uri` - This defaults to the Tango Card sandbox.  For production, you must specify the base URI for the production RaaS API. Make sure not to include any trailing slashes.
 
 There are also three optional configuration parameters:
 
