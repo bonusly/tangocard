@@ -57,6 +57,12 @@ describe Tangocard::Raas do
 
     describe "self.rewards_index" do
       context "use_cache == true" do
+        before do
+          Tangocard.configure do |c|
+            c.use_cache = true
+          end
+        end
+
         it "should do the GET request once, then hit cache" do
           mock(Tangocard::Raas).get(@endpoint + '/rewards', basic_auth_param).times(1) { raw_response }
           Tangocard::Raas.rewards_index.should == response

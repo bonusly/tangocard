@@ -7,7 +7,8 @@ class Tangocard::Order
               :reward_message,
               :reward_from,
               :delivered_at,
-              :recipient
+              :recipient,
+              :reward
 
   private_class_method :new
 
@@ -73,19 +74,11 @@ class Tangocard::Order
     @reward_from = params['reward_from']
     @delivered_at = params['delivered_at']
     @recipient = params['recipient']
-    @reward = params['reward']
+    @reward = params['reward'] || {}
   end
 
   def reward
-    if @reward.nil?
-      begin
-        @reward = Tangocard::Order.find(self.order_id).reward
-      rescue Tangocard::OrderNotFoundException => e
-        nil
-      end
-    else
-      @reward
-    end
+    @reward ||= {}
   end
 
   def identifier
