@@ -49,7 +49,7 @@ describe Tangocard::Order do
         Tangocard::Order.create(params).should be_true
       end
 
-      it "should throw a Tangocard::OrderCreateFailedException if failed" do
+      it 'should throw a Tangocard::OrderCreateFailedException if failed' do
         mock(Tangocard::Raas).create_order(params) { fail_response }
         lambda{ Tangocard::Order.create(params) }.should raise_error(Tangocard::OrderCreateFailedException)
       end
