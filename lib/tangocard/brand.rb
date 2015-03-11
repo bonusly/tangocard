@@ -1,9 +1,25 @@
 class Tangocard::Brand
   attr_reader :description, :rewards
-  @@result = nil
-  @@brands = nil
-  @@default_brands = nil
-  @@brand_finder = {}
+  @result = nil
+  @brands = nil
+  @default_brands = nil
+  @brand_finder = {}
+
+  # Clear all cached responses. Next request for brand info will pull fresh from the Tango Card API.
+  #
+  # Example:
+  #   >> Tangocard::Brand.clear_cache!
+  #    => true
+  #
+  # Arguments:
+  #   none
+  def self.clear_cache!
+    @result = nil
+    @brands = nil
+    @default_brands = nil
+    @brand_finder = {}
+    true
+  end
 
   # Return an array of all brands.
   #
@@ -14,8 +30,8 @@ class Tangocard::Brand
   # Arguments:
   #   none
   def self.all
-    @@result ||= Tangocard::Raas.rewards_index.parsed_response
-    @@brands ||= @@result['brands'].map{|p| Tangocard::Brand.new(p)}
+    @result ||= Tangocard::Raas.rewards_index.parsed_response
+    @brands ||= @result['brands'].map{|p| Tangocard::Brand.new(p)}
   end
 
   # Return an array of default brands.  Must set default_brands in your Tangocard initializer (see README).
@@ -27,7 +43,7 @@ class Tangocard::Brand
   # Arguments:
   #   none
   def self.default_brands
-    @@default_brands ||= self.all.select{|b| Tangocard.configuration.default_brands.include?(b.description)}
+    @default_brands ||= self.all.select{|b| Tangocard.configuration.default_brands.include?(b.description)}
   end
 
   # Find a brand by its :description field.
@@ -43,7 +59,7 @@ class Tangocard::Brand
   # Arguments:
   #   brand_name: (String)
   def self.find(brand_name)
-    @@brand_finder[brand_name] ||= self.all.select{|b| b.description == brand_name}.first
+    @brand_finder[brand_name] ||= self.all.select{|b| b.description == brand_name}.first
   end
 
   def initialize(params)

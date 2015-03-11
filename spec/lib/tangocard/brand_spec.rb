@@ -3,13 +3,29 @@ require 'spec_helper'
 describe Tangocard::Brand do
   include TangocardHelpers
 
-  describe "class methods" do
-    describe "self.all" do
+  describe 'class methods' do
+    describe 'self.clear_cache!' do
+      let(:rewards_index) {Object.new}
+
+      before do
+        mock(Tangocard::Raas).rewards_index.times(2) { rewards_index }
+        mock(rewards_index).parsed_response.times(2) { sample_parsed_response }
+      end
+
+      it 'should clear the class variables' do
+        Tangocard::Brand.all.should be_instance_of Array
+        Tangocard::Brand.all.should be_instance_of Array
+        Tangocard::Brand.clear_cache!
+        Tangocard::Brand.all.should be_instance_of Array
+      end
+    end
+
+    describe 'self.all' do
       before do
         stub(Tangocard::Raas).rewards_index.stub!.parsed_response { sample_parsed_response }
       end
 
-      it "should return an array of Tangocard::Brand objects" do
+      it 'should return an array of Tangocard::Brand objects' do
         all_brands = Tangocard::Brand.all
         all_brands.should be_instance_of Array
         all_brands.map(&:class).uniq.count.should == 1
@@ -17,33 +33,33 @@ describe Tangocard::Brand do
       end
     end
 
-    describe "self.default_brands" do
+    describe 'self.default_brands' do
       before do
         stub(Tangocard::Raas).rewards_index.stub!.parsed_response { sample_parsed_response }
         Tangocard.configure do |c|
-          c.default_brands = ["Tango Card"]
+          c.default_brands = ['Tango Card']
         end
       end
 
-      it "should return only brands matching Tangocard.configuration.default_brands" do
+      it 'should return only brands matching Tangocard.configuration.default_brands' do
         Tangocard::Brand.default_brands.count.should == 1
-        Tangocard::Brand.default_brands.first.description.should == "Tango Card"
+        Tangocard::Brand.default_brands.first.description.should == 'Tango Card'
       end
     end
 
-    describe "self.find" do
+    describe 'self.find' do
       before do
         stub(Tangocard::Raas).rewards_index.stub!.parsed_response { sample_parsed_response }
       end
 
-      it "should return the first brand whose description matches the brand_name" do
-        Tangocard::Brand.find("Amazon.com").class.should == Tangocard::Brand
-        Tangocard::Brand.find("Amazon.com").description.should == "Amazon.com"
+      it 'should return the first brand whose description matches the brand_name' do
+        Tangocard::Brand.find('Amazon.com').class.should == Tangocard::Brand
+        Tangocard::Brand.find('Amazon.com').description.should == 'Amazon.com'
       end
     end
   end
 
-  describe "instance methods" do
+  describe 'instance methods' do
     let(:description) { Object.new }
     let(:image_url) { Object.new }
     let(:reward) { Object.new }
@@ -52,34 +68,34 @@ describe Tangocard::Brand do
     let(:fixed_brand) { Tangocard::Brand.new(sample_brand_fixed) }
     let(:cents) { 500 }
 
-    describe "initialize" do
-      it "should initialize the description" do
+    describe 'initialize' do
+      it 'should initialize the description' do
         stub(Tangocard::Reward).new(reward) { true }
         brand = Tangocard::Brand.new(params)
         brand.description.should == description
       end
 
-      it "should initialize the image_url" do
+      it 'should initialize the image_url' do
         stub(Tangocard::Reward).new(reward) { true }
         brand = Tangocard::Brand.new(params)
         brand.image_url.should == image_url
       end
 
-      it "should initialize the reward(s)" do
+      it 'should initialize the reward(s)' do
         mock(Tangocard::Reward).new(reward) { true }
         Tangocard::Brand.new(params)
       end
     end
 
-    describe "image_url" do
-      it "should return a local override image, if present" do
+    describe 'image_url' do
+      it 'should return a local override image, if present' do
         stub(Tangocard::Reward).new(reward) { true }
-        stub(Tangocard).configuration.stub!.local_images.stub!.[](description) { "local" }
+        stub(Tangocard).configuration.stub!.local_images.stub!.[](description) { 'local' }
         brand = Tangocard::Brand.new(params)
-        brand.image_url.should == "local"
+        brand.image_url.should == 'local'
       end
 
-      it "should return image_url if no local override image" do
+      it 'should return image_url if no local override image' do
         stub(Tangocard::Reward).new(reward) { true }
         stub(Tangocard).configuration.stub!.local_images.stub!.[](description) { nil }
         brand = Tangocard::Brand.new(params)
@@ -87,8 +103,8 @@ describe Tangocard::Brand do
       end
     end
 
-    describe "purchasable_rewards" do
-      it "should return all purchasable rewards" do
+    describe 'purchasable_rewards' do
+      it 'should return all purchasable rewards' do
         fixed_brand.rewards.each_with_index do |r, i|
           mock(r).purchasable?(cents) { i.even? }
         end
@@ -100,34 +116,34 @@ describe Tangocard::Brand do
       end
     end
 
-    describe "has_purchasable_rewards?" do
-      context "has purchasable rewards" do
+    describe 'has_purchasable_rewards?' do
+      context 'has purchasable rewards' do
         before do
           stub(fixed_brand).purchasable_rewards(cents) { [:a, :b] }
         end
 
-        it "should return true" do
+        it 'should return true' do
           fixed_brand.has_purchasable_rewards?(cents).should be_true
         end
       end
 
-      context "no purchasable rewards" do
+      context 'no purchasable rewards' do
         before do
           stub(fixed_brand).purchasable_rewards(cents) { [] }
         end
 
-        it "should return false" do
+        it 'should return false' do
           fixed_brand.has_purchasable_rewards?(cents).should be_false
         end
       end
     end
 
-    describe "variable_price?" do
-      it "should return true if variable priced rewards are available" do
+    describe 'variable_price?' do
+      it 'should return true if variable priced rewards are available' do
         variable_brand.variable_price?.should be_true
       end
 
-      it "should return false if no variable priced rewards are available" do
+      it 'should return false if no variable priced rewards are available' do
         fixed_brand.variable_price?.should be_false
       end
     end

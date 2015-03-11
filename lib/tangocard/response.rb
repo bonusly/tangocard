@@ -7,14 +7,14 @@ class Tangocard::Response
   end
 
   def success?
-    parsed_response['success']
+    parsed_response['success'] rescue false
   end
 
   def error_message
-    parsed_response['error_message']
+    parsed_response['error_message'] rescue 'UNKNOWN ERROR'
   end
 
   def invalid_inputs
-    parsed_response['invalid_inputs']
+    parsed_response['invalid_inputs'] rescue 'UNKNOWN INVALID INPUTS'
   end
 end
