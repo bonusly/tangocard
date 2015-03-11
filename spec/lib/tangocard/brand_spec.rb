@@ -13,6 +13,7 @@ describe Tangocard::Brand do
       end
 
       it 'should clear the class variables' do
+        Tangocard::Brand.clear_cache!
         Tangocard::Brand.all.should be_instance_of Array
         Tangocard::Brand.all.should be_instance_of Array
         Tangocard::Brand.clear_cache!
