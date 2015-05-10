@@ -5,19 +5,10 @@ describe Tangocard::Brand do
 
   describe 'class methods' do
     describe 'self.clear_cache!' do
-      let(:rewards_index) {Object.new}
 
-      before do
-        mock(Tangocard::Raas).rewards_index.times(2) { rewards_index }
-        mock(rewards_index).parsed_response.times(2) { sample_parsed_response }
-      end
-
-      it 'should clear the class variables' do
+      it 'should call Tangocard::Raas.clear_cache!' do
+        mock(Tangocard::Raas).clear_cache! { true }
         Tangocard::Brand.clear_cache!
-        Tangocard::Brand.all.should be_instance_of Array
-        Tangocard::Brand.all.should be_instance_of Array
-        Tangocard::Brand.clear_cache!
-        Tangocard::Brand.all.should be_instance_of Array
       end
     end
 
