@@ -1,4 +1,5 @@
 # Tangocard
+[ ![Codeship Status for bonusly/tangocard](https://codeship.com/projects/06e6ede0-ac7d-0132-5432-16eb0c65b489/status?branch=master)](https://codeship.com/projects/68509)
 
 Ruby Wrapper for Tango Card RaaS API.
 
