@@ -28,7 +28,7 @@ describe Tangocard::Order do
 
       it 'should return a Tangocard::Order object if successful' do
         mock(Tangocard::Raas).show_order({'order_id' => order_id}) { success_response }
-        mock(Tangocard::Order).new(success_response.parsed_response['order']) { true }
+        mock(Tangocard::Order).new(success_response.parsed_response['order'], success_response) { true }
         Tangocard::Order.find(order_id).should be_true
       end
 
@@ -45,7 +45,7 @@ describe Tangocard::Order do
 
       it 'should return at Tangocard::Order object if successful' do
         mock(Tangocard::Raas).create_order(params) { success_response }
-        mock(Tangocard::Order).new(success_response.parsed_response['order']) { true }
+        mock(Tangocard::Order).new(success_response.parsed_response['order'], success_response) { true }
         Tangocard::Order.create(params).should be_true
       end
 

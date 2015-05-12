@@ -8,7 +8,8 @@ class Tangocard::Order
               :reward_from,
               :delivered_at,
               :recipient,
-              :reward
+              :reward,
+              :raw_response
 
   private_class_method :new
 
@@ -40,7 +41,7 @@ class Tangocard::Order
   def self.find(order_id)
     response = Tangocard::Raas.show_order({'order_id' => order_id})
     if response.success?
-      new(response.parsed_response['order'])
+      new(response.parsed_response['order'], response)
     else
       raise Tangocard::OrderNotFoundException, "#{response.error_message}"
     end
@@ -57,13 +58,13 @@ class Tangocard::Order
   def self.create(params)
     response = Tangocard::Raas.create_order(params)
     if response.success?
-      new(response.parsed_response['order'])
+      new(response.parsed_response['order'], response)
     else
       raise Tangocard::OrderCreateFailedException, "#{response.error_message}"
     end
   end
 
-  def initialize(params)
+  def initialize(params, raw_response = nil)
     @order_id = params['order_id']
     @account_identifier = params['account_identifier']
     @customer = params['customer']
@@ -75,6 +76,7 @@ class Tangocard::Order
     @delivered_at = params['delivered_at']
     @recipient = params['recipient']
     @reward = params['reward'] || {}
+    @raw_response = raw_response
   end
 
   def reward
