@@ -25,20 +25,6 @@ describe Tangocard::Brand do
       end
     end
 
-    describe 'self.default_brands' do
-      before do
-        stub(Tangocard::Raas).rewards_index.stub!.parsed_response { sample_parsed_response }
-        Tangocard.configure do |c|
-          c.default_brands = ['Tango Card']
-        end
-      end
-
-      it 'should return only brands matching Tangocard.configuration.default_brands' do
-        Tangocard::Brand.default_brands.count.should == 1
-        Tangocard::Brand.default_brands.first.description.should == 'Tango Card'
-      end
-    end
-
     describe 'self.find' do
       before do
         stub(Tangocard::Raas).rewards_index.stub!.parsed_response { sample_parsed_response }

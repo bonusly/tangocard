@@ -10,7 +10,6 @@ module Tangocard
       self.name = nil
       self.key = nil
       self.base_uri = 'https://sandbox.tangocard.com'
-      self.default_brands = ['Tango Card']
       self.local_images = {}
       self.sku_blacklist = []
       self.use_cache = true

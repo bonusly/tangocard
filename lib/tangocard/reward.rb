@@ -1,5 +1,6 @@
 class Tangocard::Reward
-  attr_reader :description, :sku, :currency_type, :unit_price, :available, :min_price, :max_price
+  attr_reader :description, :sku, :currency_type, :unit_price, :available, :min_price, :max_price,
+              :currency_code, :denomination, :locale
 
   def initialize(params)
     @description = params['description']
@@ -9,6 +10,9 @@ class Tangocard::Reward
     @available = params['available']
     @min_price = params['min_price'].to_i
     @max_price = params['max_price'].to_i
+    @currency_code = params['currency_code']
+    @denomination = params['denomination'].to_i
+    @locale = params['locale']
   end
 
   # Is this a variable-priced reward?

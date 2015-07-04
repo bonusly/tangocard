@@ -25,18 +25,6 @@ class Tangocard::Brand
     Tangocard::Raas.rewards_index.parsed_response['brands'].map{|p| Tangocard::Brand.new(p)}
   end
 
-  # Return an array of default brands.  Must set default_brands in your Tangocard initializer (see README).
-  #
-  # Example:
-  #   >> Tangocard::Brand.default_brands
-  #    => [#<Tangocard::Brand:0x007f9a6f9d3030 ...>, #<Tangocard::Brand:0x007f9a6f9d3030 ...>, ...]
-  #
-  # Arguments:
-  #   none
-  def self.default_brands
-    self.all.select{|b| Tangocard.configuration.default_brands.include?(b.description)}
-  end
-
   # Find a brand by its :description field.
   #
   # Example:
