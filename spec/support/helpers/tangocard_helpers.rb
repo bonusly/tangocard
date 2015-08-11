@@ -90,6 +90,43 @@ module TangocardHelpers
     Tangocard::Response.new(raw_response)
   end
 
+  def sample_register_credit_card_response(success)
+    if success
+      raw_response = OpenStruct.new(
+        parsed_response: {"success"=>true, "cc_token"=>"33041234", "active_date"=>1439286111},
+        code: 200
+      )
+    else
+      raw_response = OpenStruct.new(
+          parsed_response: {
+            "success": false,
+            "denial_code": "CC_DUPEREGISTER",
+            "denial_message": "This payment method has already been registered, it can not be added again. If there are any questions, please call our operations team directly at 1-877-558-2646 (Monday - Friday, 8am - 6pm PDT)."
+          },
+          code: 400
+      )
+    end
+    Tangocard::Response.new(raw_response)
+  end
+
+  def sample_delete_credit_card_response(success)
+    if success
+      raw_response = OpenStruct.new(
+        parsed_response: {"success"=>true, "message"=>"This card is no longer present in the system."},
+        code: 200
+      )
+    else
+      raw_response = OpenStruct.new(
+          parsed_response: {
+            "success": false,
+            "error_message"=>"RAAS:CCUNREG:1000"
+          },
+          code: 500
+      )
+    end
+    Tangocard::Response.new(raw_response)
+  end
+
   def sample_find_order_response(success)
     if success
       raw_response = OpenStruct.new(
