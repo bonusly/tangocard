@@ -119,7 +119,7 @@ class Tangocard::Account
   # Add funds to the account.
   # Raises Tangocard::AccountFundFailedException on failure.
   # Example:
-  #   >> account.fund!(5000, '128.128.128.128', '12345678', '123')
+  #   >> account.cc_fund(5000, '128.128.128.128', '12345678', '123')
   #    => {"success"=>true, "fund_id"=>"RF13-09261098-12", "amount"=>5000}
 
   # Arguments:
@@ -127,7 +127,7 @@ class Tangocard::Account
   #   client_ip: (String)
   #   cc_token: (String)
   #   security_code: (String)
-  # def fund!(amount, client_ip, cc_token, security_code)
+  # def cc_fund(amount, client_ip, cc_token, security_code)
   #   params = {
   #       'amount' => amount,
   #       'client_ip' => client_ip,
@@ -137,10 +137,10 @@ class Tangocard::Account
   #       'security_code' => security_code
   #   }
   #
-  #   response = Tangocard::Raas.fund_account(params)
+  #   response = Tangocard::Raas.cc_fund_account(params)
   # end
   #
-  def fund!(amount, client_ip, cc_token, security_code)
+  def cc_fund(amount, client_ip, cc_token, security_code)
     params = {
         'amount' => amount,
         'client_ip' => client_ip,
@@ -150,12 +150,54 @@ class Tangocard::Account
         'security_code' => security_code
     }
 
-    response = Tangocard::Raas.fund_account(params)
+    response = Tangocard::Raas.cc_fund_account(params)
     if response.success?
       response.parsed_response
     else
-      raise Tangocard::AccountFundFailedException, "#{response.error_message}"
+      raise Tangocard::AccountFundFailedException, "#{response.error_message} #{response.denial_message} #{response.invalid_inputs}"
     end
+  end
+
+  # (DEPRECATED)
+  # Add funds to the account.
+  #
+  # Example:
+  #   >> account.fund!(10000, '128.128.128.128', Hash (see example below))
+  #    => #<Tangocard::Account:0x007f9a6fec0138 @customer="bonusly", @email="dev@bonus.ly", @identifier="test", @available_balance=0>
+  #
+  # Arguments:
+  #   amount: (Integer)
+  #   client_ip: (String)
+  #   credit_card: (Hash) - see https://github.com/tangocarddev/RaaS/blob/master/fund_create.schema.json for details
+  #
+  # Credit Card Hash Example:
+  #
+  #   {
+  #       'number' => '4111111111111111',
+  #       'expiration' => '01/17',
+  #       'security_code' => '123',
+  #       'billing_address' => {
+  #           'f_name' => 'Jane',
+  #           'l_name' => 'User',
+  #           'address' => '123 Main Street',
+  #           'city' => 'Anytown',
+  #           'state' => 'NY',
+  #           'zip' => '11222',
+  #           'country' => 'USA',
+  #           'email' => 'jane@company.com'
+  #       }
+  #   }
+  def fund!(amount, client_ip, credit_card)
+    warn "[DEPRECATION] `fund!` is deprecated. Please use `cc_fund` instead. See https://github.com/tangocarddev/RaaS#fund-a-platforms-account"
+
+    params = {
+        'amount' => amount,
+        'client_ip' => client_ip,
+        'credit_card' => credit_card,
+        'customer' => customer,
+        'account_identifier' => identifier
+    }
+    Tangocard::Raas.fund_account(params)
   end
 
   # Delete a credit card from an account

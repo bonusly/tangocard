@@ -25,6 +25,7 @@ class Tangocard::Raas
     Tangocard::Response.new(get(endpoint + "/accounts/#{params['customer']}/#{params['identifier']}", basic_auth_param))
   end
 
+  # (Deprecated)
   # Funds an account. Returns Tangocard::Response object.
   #
   # Example:
@@ -32,8 +33,20 @@ class Tangocard::Raas
   #    => #<Tangocard::Response:0x007f9a6c4bca68 ...>
   #
   # Arguments:
-  #   params: (Hash - see https://github.com/tangocarddev/RaaS#fund-resources for details)
+  #   params: (Hash - see https://github.com/tangocarddev/RaaS#fund-a-platforms-account for details)
   def self.fund_account(params)
+    Tangocard::Response.new(post(endpoint + '/funds', {:body => params.to_json}.merge(basic_auth_param)))
+  end
+
+  # Funds an account. Returns Tangocard::Response object.
+  #
+  # Example:
+  #   >> Tangocard::Raas.cc_fund_account(params)
+  #    => #<Tangocard::Response:0x007f9a6c4bca68 ...>
+  #
+  # Arguments:
+  #   params: (Hash - see https://github.com/tangocarddev/RaaS#fund-resources for details)
+  def self.cc_fund_account(params)
     Tangocard::Response.new(post(endpoint + '/cc_fund', {:body => params.to_json}.merge(basic_auth_param)))
   end
 

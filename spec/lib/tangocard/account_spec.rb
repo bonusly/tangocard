@@ -136,24 +136,24 @@ describe Tangocard::Account do
       end
     end
 
-    describe "fund!" do
+    describe "cc_fund" do
       before do
-        mock(Tangocard::Raas).fund_account(fund_params) { response }
+        mock(Tangocard::Raas).cc_fund_account(fund_params) { response }
       end
 
-      context "fund! succeeds" do
+      context "cc_fund succeeds" do
         let(:response) { sample_fund_account_response(true) }
 
         it "should fund the account" do
-          @account.fund!(amount, client_ip, cc_token, security_code)['fund_id'].should eq("RF13-09261098-12")
+          @account.cc_fund(amount, client_ip, cc_token, security_code)['fund_id'].should eq("RF13-09261098-12")
         end
       end
 
-      context "fund! fails" do
+      context "cc_fund fails" do
         let(:response) { sample_fund_account_response(false) }
 
         it "should throw an exception" do
-          lambda{ @account.fund!(amount, client_ip, cc_token, security_code)}.should raise_error(Tangocard::AccountFundFailedException)
+          lambda{ @account.cc_fund(amount, client_ip, cc_token, security_code)}.should raise_error(Tangocard::AccountFundFailedException)
         end
       end
     end
