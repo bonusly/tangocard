@@ -7,8 +7,22 @@ describe Tangocard::Account do
   let(:identifier) { Object.new }
   let(:email) { Object.new }
   let(:available_balance) { Object.new }
+  let(:credit_card) { Object.new }
+  let(:client_ip) { Object.new }
+  let(:cc_token) { Object.new }
+  let(:security_code) { Object.new }
+  let(:amount) { Object.new }
+  let(:account_response) { sample_find_account_response(true) }
   let(:find_params) { {'customer' => customer, 'identifier' => identifier} }
   let(:create_params) { {'customer' => customer, 'identifier' => identifier, 'email' => email} }
+  let(:fund_params) { {'amount' => amount, 'client_ip' => client_ip, 'cc_token' => cc_token, 'security_code' => security_code, 'customer' => 'bonusly', 'account_identifier' => 'test1'} }
+  let(:register_credit_card_params) { {'client_ip' => client_ip, 'credit_card' => credit_card, 'customer' => 'bonusly', 'account_identifier' => 'test1'} }
+  let(:delete_credit_card_params) { {'cc_token' => cc_token, 'customer' => 'bonusly', 'account_identifier' => 'test1'} }
+
+  before do
+    mock(Tangocard::Raas).show_account(find_params) { account_response }
+    @account = Tangocard::Account.find(customer, identifier)
+  end
 
   describe "class methods" do
     describe "self.find" do
@@ -99,8 +113,71 @@ describe Tangocard::Account do
       end
     end
 
-    describe "fund!" do
-      pending "TODO"
+    describe "register_credit_card" do
+      before do
+        mock(Tangocard::Raas).register_credit_card(register_credit_card_params) { response }
+      end
+
+      context "register_credit_card succeeds" do
+        let(:response) { sample_register_credit_card_response(true) }
+
+        it "should register the credit card" do
+          @account.register_credit_card(client_ip, credit_card)
+          @account.cc_token.should eq("33041234")
+        end
+      end
+
+      context "register_credit_card fails" do
+        let(:response) { sample_register_credit_card_response(false) }
+
+        it "should throw an exception" do
+          lambda{ @account.register_credit_card(client_ip, credit_card)}.should raise_error(Tangocard::AccountRegisterCreditCardFailedException)
+        end
+      end
+    end
+
+    describe "cc_fund" do
+      before do
+        mock(Tangocard::Raas).cc_fund_account(fund_params) { response }
+      end
+
+      context "cc_fund succeeds" do
+        let(:response) { sample_fund_account_response(true) }
+
+        it "should fund the account" do
+          @account.cc_fund(amount, client_ip, cc_token, security_code)['fund_id'].should eq("RF13-09261098-12")
+        end
+      end
+
+      context "cc_fund fails" do
+        let(:response) { sample_fund_account_response(false) }
+
+        it "should throw an exception" do
+          lambda{ @account.cc_fund(amount, client_ip, cc_token, security_code)}.should raise_error(Tangocard::AccountFundFailedException)
+        end
+      end
+    end
+
+    describe "delete_credit_card" do
+      before do
+        mock(Tangocard::Raas).delete_credit_card(delete_credit_card_params) { response }
+      end
+
+      context "delete_credit_card succeeds" do
+        let (:response) { sample_delete_credit_card_response(true) }
+
+        it "should delete the credit card" do
+          @account.delete_credit_card(cc_token)["success"].should be(true)
+        end
+      end
+
+      context "delete_credit_card fails" do
+        let (:response) { sample_delete_credit_card_response(false) }
+
+        it "should thrown an exception" do
+          lambda{ @account.delete_credit_card(cc_token)}.should raise_error(Tangocard::AccountDeleteCreditCardFailedException)
+        end
+      end
     end
   end
 end
