@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    tangocard (4.0.0)
+    tangocard (4.1.0)
       httparty (~> 0.11)
       i18n (~> 0.6.11)
       money (~> 6.1)
