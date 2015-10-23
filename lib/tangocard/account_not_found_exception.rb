@@ -1,3 +1,3 @@
-class Tangocard::AccountNotFoundException < Exception
+class Tangocard::AccountNotFoundException < StandardError
 
 end

@@ -1,3 +1,3 @@
-class Tangocard::OrderNotFoundException < Exception
+class Tangocard::OrderNotFoundException < StandardError
 
 end

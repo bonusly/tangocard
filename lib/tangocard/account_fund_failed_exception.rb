@@ -1,3 +1,3 @@
-class Tangocard::AccountFundFailedException < Exception
+class Tangocard::AccountFundFailedException < StandardError
 
 end

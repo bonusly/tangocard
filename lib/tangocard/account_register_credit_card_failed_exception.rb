@@ -1,3 +1,3 @@
-class Tangocard::AccountRegisterCreditCardFailedException < Exception
+class Tangocard::AccountRegisterCreditCardFailedException < StandardError
 
 end
