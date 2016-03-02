@@ -29,11 +29,12 @@ class Tangocard::Brand
   #
   # Example:
   #   >> Tangocard::Brand.find("Amazon.com")
-  #    => #<Tangocard::Brand:0x007f9a6fb076e0 @description="Amazon.com",
-  #       @image_url="http://static-integration.tangocard.com/graphics/item-images/amazon-gift-card.png",
-  #       @rewards=[#<Tangocard::Reward:0x007f9a6fb07618 @description="Amazon.com Gift Card (Custom)",
-  #       @sku="AMZN-E-V-STD", @currency_type="USD", @unit_price=-1, @available=true, @min_price=100,
-  #       @max_price=100000>]>
+  #    => #<Tangocard::Brand:0x007f96a9cbe980 @description="Amazon.com",
+  #       @image_url="https://dwwvg90koz96l.cloudfront.net/graphics/item-images/amazon-gift-card.png",
+  #       @rewards=[#<Tangocard::Reward:0x007f96a9cbe930 @type="reward",
+  #       @description="Amazon.com Gift Card (Custom)", @sku="AMZN-E-V-STD", @is_variable=true,
+  #       @denomination=0, @min_price=1, @max_price=100000, @currency_code="USD", @available=true,
+  #       @countries=["US"]>]>
   #
   # Arguments:
   #   brand_name: (String)
@@ -64,8 +65,12 @@ class Tangocard::Brand
   #
   # Example:
   #   >> itunes_brand.purchasable_rewards(1000)
-  #    => [#<Tangocard::Reward:0x007f9a6fd29810 @description="iTunes Gift Card $10", @sku="APPL-E-1000-STD",
-  #        @currency_type="USD", @unit_price=1000, @available=true, @min_price=0, @max_price=0>]
+  #    => [#<Tangocard::Reward:0x007f96aa3b4dc0 @type="reward", @description="iTunes Code USD $5",
+  #        @sku="APPL-E-500-STD", @is_variable=false, @denomination=500, @min_price=0, @max_price=0,
+  #        @currency_code="USD", @available=true, @countries=["US"]>,
+  #        #<Tangocard::Reward:0x007f96aa3b4d98 @type="reward", @description="iTunes Code USD $10",
+  #        @sku="APPL-E-1000-STD", @is_variable=false, @denomination=1000, @min_price=0, @max_price=0,
+  #        @currency_code="USD", @available=true, @countries=["US"]>]
   #
   # Arguments:
   #   balance_in_cents: (Integer)
