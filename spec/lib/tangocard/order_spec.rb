@@ -61,17 +61,19 @@ describe Tangocard::Order do
       let(:params) { Object.new }
 
       it 'should set the attributes on the object' do
-        mock(params).[]('order_id') { 'order_id'}
-        mock(params).[]('account_identifier') { 'account_identifier'}
-        mock(params).[]('customer') { 'customer'}
-        mock(params).[]('sku') { 'sku'}
-        mock(params).[]('amount') { 'amount'}
-        mock(params).[]('reward_message') { 'reward_message'}
-        mock(params).[]('reward_subject') { 'reward_subject'}
-        mock(params).[]('reward_from') { 'reward_from'}
-        mock(params).[]('delivered_at') { 'delivered_at'}
-        mock(params).[]('recipient') { 'recipient'}
-        mock(params).[]('reward') { 'reward'}
+        mock(params).[]('order_id') { 'order_id' }
+        mock(params).[]('account_identifier') { 'account_identifier' }
+        mock(params).[]('customer') { 'customer' }
+        mock(params).[]('sku') { 'sku' }
+        mock(params).[]('denomination') { 'denomination' }
+        mock(params).[]('amount_charged') { 'amount_charged' }
+        mock(params).[]('reward_message') { 'reward_message' }
+        mock(params).[]('reward_subject') { 'reward_subject' }
+        mock(params).[]('reward_from') { 'reward_from' }
+        mock(params).[]('delivered_at') { 'delivered_at' }
+        mock(params).[]('recipient') { 'recipient' }
+        mock(params).[]('external_id') { 'recipient' }
+        mock(params).[]('reward') { 'reward' }
 
         Tangocard::Order.send(:new, params)
       end

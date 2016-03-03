@@ -3,7 +3,7 @@
 
 Ruby Wrapper for Tango Card RaaS API.
 
-Tango Card provides a RaaS API for developers (https://github.com/tangocarddev/RaaS). This gem provides commonsense Ruby
+Tango Card provides a RaaS API for developers (https://www.tangocard.com/docs/raas-api/). This gem provides commonsense Ruby
 objects to wrap the JSON endpoints of the RaaS API.
 
 ## Information
@@ -50,7 +50,7 @@ There are also three optional configuration parameters:
 This gem provides two tools:
 
 1. A simple wrapper for the Tango Card RaaS API, consisting of two classes: `Tangocard::Raas` and `Tangocard::Response`.
-2. Models for each of the Tango Card objects: `Tangocard::Account`, `Tangocard::Brand`, `Tangocard::Reward`, and `Tangocard::Order`. These provide a greater level of abstraction and ease of use.
+2. Models for each of the Tango Card objects: `Tangocard::Account`, `Tangocard::Brand`, `Tangocard::Reward`, `Tangocard::Order` and `Tangocard::ExchangeRate`. These provide a greater level of abstraction and ease of use.
 
 ## Notes and Credits
 

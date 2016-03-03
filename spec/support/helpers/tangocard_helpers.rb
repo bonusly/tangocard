@@ -137,7 +137,14 @@ module TangocardHelpers
                   "account_identifier"=>"ElliottTest",
                   "customer"=>"ElliottTest",
                   "sku"=>"APPL-E-1500-STD",
-                  "amount"=>1500,
+                  "denomination"=> {
+                      "value"=>1500,
+                      "currency_code"=>"USD"
+                  },
+                  "amount_charged"=> {
+                      "value"=>1500,
+                      "currency_code"=>"USD"
+                  },
                   "reward_message"=>"testing",
                   "reward_subject"=>"RaaS Sandbox Test",
                   "reward_from"=>"Elliott",
@@ -146,6 +153,7 @@ module TangocardHelpers
                       "name"=>"Elliott",
                       "email"=>"elliott@tangocard.com"
                   },
+                  "external_id"=>nil,
                   "reward"=> {
                       "token"=>"520d12fa655b54.34581245",
                       "number"=>"1111111111111256"
@@ -212,7 +220,8 @@ module TangocardHelpers
         "reward_subject" => "Your bonus.ly reward",
         "reward_message" => "Here is your bonus.ly reward",
         "reward_from" => "bonus.ly",
-        "send_reward" => true
+        "send_reward" => true,
+        "external_id" => "bonusly_id"
     }
     if variable
       params.merge({
@@ -233,8 +242,15 @@ module TangocardHelpers
                   "order_id"=>"113-09261158-14",
                   "account_identifier"=>"primary",
                   "customer"=>"bonusly-development",
-                  "sku"=>"AMZN-E-V-STD",
-                  "amount"=>2500,
+                  "sku"=>"APUK-E-1500-STD",
+                  "denomination"=> {
+                      "value"=>1500,
+                      "currency_code"=>"GBP"
+                  },
+                  "amount_charged"=> {
+                      "value"=>2327,
+                      "currency_code"=>"USD"
+                  },
                   "reward_message"=>"Here is your bonus.ly reward",
                   "reward_subject"=>"Your bonus.ly reward",
                   "reward_from"=>"bonus.ly",
@@ -243,9 +259,10 @@ module TangocardHelpers
                       "name"=>"Raphael",
                       "email"=>"raphael@bonus.ly"
                   },
+                  "external_id"=>"bonusly_id",
                   "reward"=> {
                       "token"=>"52349855591df1.48777244",
-                      "number"=>"PTP6-5RC9FG-AWMR"
+                      "number"=>"AVTBJRHKELLG8MO1"
                   }
               }
           },

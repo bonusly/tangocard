@@ -5,3 +5,4 @@
 1.0.0: Add use_cache to speed up rewards retrieval
 2.0.0: Performance improvements
 4.1.0: Update to use new Funding API (old `fund!` method is still present, but deprecated)
+5.0.0: Major update, switch to v1.1 API, backward incompatible

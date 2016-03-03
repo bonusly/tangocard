@@ -80,13 +80,13 @@ class Tangocard::Account
   # Arguments:
   #   client_ip: (String)
   #   credit_card: (Hash) - see
-  # https://github.com/tangocarddev/RaaS/blob/master/cc_register.schema.json for details
+  # https://www.tangocard.com/docs/raas-api/#create-cc-registration for details
   #
   # Credit Card Hash Example:
   #
   #   {
   #       'number' => '4111111111111111',
-  #       'expiration' => '01/17',
+  #       'expiration' => '2017-01',
   #       'security_code' => '123',
   #       'billing_address' => {
   #           'f_name' => 'Jane',
@@ -112,7 +112,7 @@ class Tangocard::Account
       @cc_token = response.parsed_response['cc_token']
       response.parsed_response
     else
-      raise Tangocard::AccountRegisterCreditCardFailedException, "#{response.denial_message}"
+      raise Tangocard::AccountRegisterCreditCardFailedException, "#{response.error_message} #{response.denial_message} #{response.invalid_inputs}"
     end
   end
 
@@ -156,48 +156,6 @@ class Tangocard::Account
     else
       raise Tangocard::AccountFundFailedException, "#{response.error_message} #{response.denial_message} #{response.invalid_inputs}"
     end
-  end
-
-  # (DEPRECATED)
-  # Add funds to the account.
-  #
-  # Example:
-  #   >> account.fund!(10000, '128.128.128.128', Hash (see example below))
-  #    => #<Tangocard::Account:0x007f9a6fec0138 @customer="bonusly", @email="dev@bonus.ly", @identifier="test", @available_balance=0>
-  #
-  # Arguments:
-  #   amount: (Integer)
-  #   client_ip: (String)
-  #   credit_card: (Hash) - see https://github.com/tangocarddev/RaaS/blob/master/fund_create.schema.json for details
-  #
-  # Credit Card Hash Example:
-  #
-  #   {
-  #       'number' => '4111111111111111',
-  #       'expiration' => '01/17',
-  #       'security_code' => '123',
-  #       'billing_address' => {
-  #           'f_name' => 'Jane',
-  #           'l_name' => 'User',
-  #           'address' => '123 Main Street',
-  #           'city' => 'Anytown',
-  #           'state' => 'NY',
-  #           'zip' => '11222',
-  #           'country' => 'USA',
-  #           'email' => 'jane@company.com'
-  #       }
-  #   }
-  def fund!(amount, client_ip, credit_card)
-    warn "[DEPRECATION] `fund!` is deprecated. Please use `cc_fund` instead. See https://github.com/tangocarddev/RaaS#fund-a-platforms-account"
-
-    params = {
-        'amount' => amount,
-        'client_ip' => client_ip,
-        'credit_card' => credit_card,
-        'customer' => customer,
-        'account_identifier' => identifier
-    }
-    Tangocard::Raas.fund_account(params)
   end
 
   # Delete a credit card from an account

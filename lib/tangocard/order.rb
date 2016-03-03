@@ -3,11 +3,14 @@ class Tangocard::Order
               :account_identifier,
               :customer,
               :sku,
-              :amount,
+              :denomination,
+              :amount_charged,
               :reward_message,
+              :reward_subject,
               :reward_from,
               :delivered_at,
               :recipient,
+              :external_id,
               :reward,
               :raw_response
 
@@ -20,7 +23,7 @@ class Tangocard::Order
   #    => [#<Tangocard::Order:0x007f9a6c4bca68 ...>, #<Tangocard::Order:0x007f9a6c4bca68 ...>, ...]
   #
   # Arguments:
-  #   params: (Hash - optional, see https://github.com/tangocarddev/RaaS#retrieve-a-list-of-historical-orders for details)
+  #   params: (Hash - optional, see https://www.tangocard.com/docs/raas-api/#list-orders for details)
   def self.all(params = {})
     response = Tangocard::Raas.orders_index(params)
     if response.success?
@@ -54,29 +57,31 @@ class Tangocard::Order
   #    => #<Tangocard::Order:0x007f9a6c4bca68 ...>
   #
   # Arguments:
-  #   params: (Hash - see https://github.com/tangocarddev/RaaS#place-an-order for details)
+  #   params: (Hash - see https://www.tangocard.com/docs/raas-api/#create-order for details)
   def self.create(params)
     response = Tangocard::Raas.create_order(params)
     if response.success?
       new(response.parsed_response['order'], response)
     else
-      raise Tangocard::OrderCreateFailedException, "#{response.error_message}"
+      raise Tangocard::OrderCreateFailedException, "#{response.error_message} #{response.invalid_inputs}"
     end
   end
 
   def initialize(params, raw_response = nil)
-    @order_id = params['order_id']
+    @order_id           = params['order_id']
     @account_identifier = params['account_identifier']
-    @customer = params['customer']
-    @sku = params['sku']
-    @amount = params['amount']
-    @reward_message = params['reward_message']
-    @reward_subject = params['reward_subject']
-    @reward_from = params['reward_from']
-    @delivered_at = params['delivered_at']
-    @recipient = params['recipient']
-    @reward = params['reward'] || {}
-    @raw_response = raw_response
+    @customer           = params['customer']
+    @sku                = params['sku']
+    @denomination       = params['denomination'] || {}
+    @amount_charged     = params['amount_charged'] || {}
+    @reward_message     = params['reward_message']
+    @reward_subject     = params['reward_subject']
+    @reward_from        = params['reward_from']
+    @delivered_at       = params['delivered_at']
+    @recipient          = params['recipient'] || {}
+    @external_id        = params['external_id']
+    @reward             = params['reward'] || {}
+    @raw_response       = raw_response
   end
 
   def reward
