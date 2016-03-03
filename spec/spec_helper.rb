@@ -4,7 +4,6 @@ require 'tangocard'
 require 'rr'
 
 Dir["./spec/support/*/*.rb"].each {|f| require f}
-I18n.enforce_available_locales = false
 
 # do not use I18n for specs, as it not setup, fallback to defaults instead
 Money.use_i18n = false
