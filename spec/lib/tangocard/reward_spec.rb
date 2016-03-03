@@ -22,6 +22,7 @@ describe Tangocard::Brand do
           @reward.available.should == @reward_params['available']
           @reward.min_price.should == @reward_params['min_price'].to_i
           @reward.max_price.should == @reward_params['max_price'].to_i
+          @reward.countries.should == @reward_params['countries']
         end
       end
 
@@ -76,6 +77,7 @@ describe Tangocard::Brand do
           @reward.available.should == @reward_params['available']
           @reward.min_price.should == @reward_params['min_price'].to_i
           @reward.max_price.should == @reward_params['max_price'].to_i
+          @reward.countries.should == @reward_params['countries']
         end
       end
 
