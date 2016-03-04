@@ -11,7 +11,7 @@ Gem::Specification.new do |s|
   s.email       = ['raphael@bonus.ly']
   s.homepage    = 'http://bonus.ly'
   s.summary     = 'Ruby Wrapper for Tango Card RaaS API.'
-  s.description = 'Tango Card provides a RaaS API for developers (https://github.com/tangocarddev/RaaS). This gem
+  s.description = 'Tango Card provides a RaaS API for developers (https://www.tangocard.com/docs/raas-api/). This gem
                    provides commonsense Ruby objects to wrap the JSON endpoints of the RaaS API.'
 
   s.files = Dir['{app,config,db,lib}/**/*'] + ['MIT-LICENSE', 'Rakefile', 'README.md']

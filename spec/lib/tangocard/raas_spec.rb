@@ -14,7 +14,7 @@ describe Tangocard::Raas do
       c.name = name
       c.key = key
     end
-    @endpoint = Tangocard.configuration.base_uri + '/raas/v1'
+    @endpoint = Tangocard.configuration.base_uri + '/raas/v1.1'
   end
 
   describe 'private methods' do
@@ -44,14 +44,6 @@ describe Tangocard::Raas do
         mock(params).[]('identifier') { 'identifier' }
         mock(Tangocard::Raas).get(@endpoint + '/accounts/customer/identifier', basic_auth_param) { raw_response }
         Tangocard::Raas.show_account(params).should == response
-      end
-    end
-    
-    describe 'self.fund_account' do
-      it 'should POST to the RaaS API with appropriate params and wrap the result in a Tangocard::Response object' do
-        mock(params).to_json { json }
-        mock(Tangocard::Raas).post(@endpoint + '/funds', {body: json}.merge(basic_auth_param)) { raw_response }
-        Tangocard::Raas.fund_account(params).should == response
       end
     end
 

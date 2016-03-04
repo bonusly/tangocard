@@ -1,18 +1,18 @@
 class Tangocard::Reward
-  attr_reader :description, :sku, :currency_type, :unit_price, :available, :min_price, :max_price,
-              :currency_code, :denomination, :locale
+  attr_reader :type, :description, :sku, :is_variable, :denomination, :min_price, :max_price,
+              :currency_code, :available, :countries
 
   def initialize(params)
-    @description = params['description']
-    @sku = params['sku']
-    @currency_type = params['currency_type']
-    @unit_price = params['unit_price'].to_i
-    @available = params['available']
-    @min_price = params['min_price'].to_i
-    @max_price = params['max_price'].to_i
+    @type          = params['type']
+    @description   = params['description']
+    @sku           = params['sku']
+    @is_variable   = params['is_variable']
+    @denomination  = params['denomination'].to_i
+    @min_price     = params['min_price'].to_i
+    @max_price     = params['max_price'].to_i
     @currency_code = params['currency_code']
-    @denomination = params['denomination'].to_i
-    @locale = params['locale']
+    @available     = params['available']
+    @countries     = params['countries']
   end
 
   # Is this a variable-priced reward?
@@ -24,7 +24,7 @@ class Tangocard::Reward
   # Arguments:
   #   none
   def variable_price?
-    self.unit_price == -1
+    is_variable
   end
 
   # Is this reward purchasable given a certain number of cents available to purchase it?
@@ -43,21 +43,21 @@ class Tangocard::Reward
     if variable_price?
       min_price <= balance_in_cents
     else
-      unit_price <= balance_in_cents
+      denomination <= balance_in_cents
     end
   end
 
-  # Converts price in cents for given field to Money object using currency_type
+  # Converts price in cents for given field to Money object using currency_code
   #
   # Example:
   #   >> reward.to_money(:unit_price)
   #    => #<Money fractional:5000 currency:USD>
   #
   # Arguments:
-  #   field_name: (Symbol - must be :min_price, :max_price, or :unit_price)
+  #   field_name: (Symbol - must be :min_price, :max_price, or :denomination)
   def to_money(field_name)
-    return nil unless [:min_price, :max_price, :unit_price].include?(field_name)
+    return nil unless [:min_price, :max_price, :denomination].include?(field_name)
 
-    Money.new(self.send(field_name), currency_type)
+    Money.new(self.send(field_name), currency_code)
   end
 end

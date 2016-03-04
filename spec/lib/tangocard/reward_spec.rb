@@ -16,11 +16,13 @@ describe Tangocard::Brand do
         it 'should set instance variables from parameters' do
           @reward.description.should == @reward_params['description']
           @reward.sku.should == @reward_params['sku']
-          @reward.currency_type.should == @reward_params['currency_type']
-          @reward.unit_price.should == @reward_params['unit_price'].to_i
+          @reward.is_variable.should == @reward_params['is_variable']
+          @reward.currency_code.should == @reward_params['currency_code']
+          @reward.denomination.should == @reward_params['denomination'].to_i
           @reward.available.should == @reward_params['available']
           @reward.min_price.should == @reward_params['min_price'].to_i
           @reward.max_price.should == @reward_params['max_price'].to_i
+          @reward.countries.should == @reward_params['countries']
         end
       end
 
@@ -36,13 +38,13 @@ describe Tangocard::Brand do
           @reward.purchasable?(cents).should be_false
         end
 
-        it 'should be true if unit_price <= balance' do
-          mock(@reward).unit_price.times(2).mock!.<=(cents) { true }
+        it 'should be true if denomination <= balance' do
+          mock(@reward).denomination.mock!.<=(cents) { true }
           @reward.purchasable?(cents).should be_true
         end
 
-        it 'should be false if unit_price > balance' do
-          mock(@reward).unit_price.times(2).mock!.<=(cents) { false }
+        it 'should be false if denomination > balance' do
+          mock(@reward).denomination.mock!.<=(cents) { false }
           @reward.purchasable?(cents).should be_false
         end
       end
@@ -53,8 +55,8 @@ describe Tangocard::Brand do
         end
 
         it 'should properly format the unit_price' do
-          mock(@reward).send(:unit_price) { cents }
-          @reward.to_money(:unit_price).format.should == '$5.00'
+          mock(@reward).send(:denomination) { cents }
+          @reward.to_money(:denomination).format.should == '$5.00'
         end
       end
     end
@@ -69,11 +71,13 @@ describe Tangocard::Brand do
         it 'should set instance variables from parameters' do
           @reward.description.should == @reward_params['description']
           @reward.sku.should == @reward_params['sku']
-          @reward.currency_type.should == @reward_params['currency_type']
-          @reward.unit_price.should == @reward_params['unit_price'].to_i
+          @reward.is_variable.should == @reward_params['is_variable']
+          @reward.currency_code.should == @reward_params['currency_code']
+          @reward.denomination.should == @reward_params['denomination'].to_i
           @reward.available.should == @reward_params['available']
           @reward.min_price.should == @reward_params['min_price'].to_i
           @reward.max_price.should == @reward_params['max_price'].to_i
+          @reward.countries.should == @reward_params['countries']
         end
       end
 
