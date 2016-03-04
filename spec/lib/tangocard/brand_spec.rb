@@ -35,6 +35,23 @@ describe Tangocard::Brand do
         Tangocard::Brand.find('Amazon.com').description.should == 'Amazon.com'
       end
     end
+
+    describe 'self.default' do
+      before do
+        Tangocard.configure do |c|
+          c.default_brands = ['Amazon.com', 'Prepaid Virtual Visa', 'invalid']
+        end
+        stub(Tangocard::Raas).rewards_index.stub!.parsed_response { sample_parsed_response }
+      end
+
+      it 'should return array of default Tangocard::Brand objects' do
+        default_brands = Tangocard::Brand.default
+        default_brands.should be_instance_of Array
+        default_brands.count.should == 2
+        default_brands.map(&:class).uniq.count.should == 1
+        default_brands.map(&:class).uniq.first.should == Tangocard::Brand
+      end
+    end
   end
 
   describe 'instance methods' do
