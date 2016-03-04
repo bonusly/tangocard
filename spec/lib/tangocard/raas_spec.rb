@@ -64,6 +64,11 @@ describe Tangocard::Raas do
     end
 
     describe 'self.rewards_index' do
+      before do
+        Tangocard::Raas.class_variable_set :@@rewards_response, nil
+        Tangocard::Raas.class_variable_set :@@rewards_response_expires_at, 0
+      end
+
       context 'use_cache == true' do
         before do
           Tangocard.configure do |c|
@@ -71,14 +76,40 @@ describe Tangocard::Raas do
           end
         end
 
-        it 'should do the GET request once, then hit cache' do
-          mock(Tangocard::Raas).get(@endpoint + '/rewards', basic_auth_param).times(2) { raw_response }
-          Tangocard::Raas.rewards_index.should == response
-          Tangocard::Raas.rewards_index.should == response
-          Tangocard::Raas.clear_cache!
-          Tangocard::Raas.rewards_index.should == response
-          Tangocard::Raas.rewards_index.should == response
+        context 'cache_ttl == 0' do
+          before do
+            Tangocard.configure do |c|
+              c.cache_ttl = 0
+            end
+          end
+
+          it 'should do the GET request once, then hit cache' do
+            mock(Tangocard::Raas).get(@endpoint + '/rewards', basic_auth_param).times(2) { raw_response }
+            Tangocard::Raas.rewards_index.should == response
+            Tangocard::Raas.rewards_index.should == response
+            Tangocard::Raas.clear_cache!
+            Tangocard::Raas.rewards_index.should == response
+            Tangocard::Raas.rewards_index.should == response
+          end
         end
+
+        context 'cache_ttl > 0' do
+          before do
+            Tangocard.configure do |c|
+              c.cache_ttl = 3600
+            end
+          end
+
+          it 'should do GET requests only if cache expired' do
+            mock(Tangocard::Raas).get(@endpoint + '/rewards', basic_auth_param).times(2) { raw_response }
+            Tangocard::Raas.rewards_index.should == response
+            Tangocard::Raas.rewards_index.should == response
+            Tangocard::Raas.class_variable_set :@@rewards_response_expires_at, 0
+            Tangocard::Raas.rewards_index.should == response
+            Tangocard::Raas.rewards_index.should == response
+          end
+        end
+
       end
 
       context 'use_cache == false' do
