@@ -42,6 +42,19 @@ class Tangocard::Brand
     self.all.select{|b| b.description == brand_name}.first
   end
 
+  # Return an array of default brands. You can set :default_brands in your Tangocard initializer
+  # to define your desired list of brands. See the README for details.
+  #
+  # Example:
+  #   >> Tangocard::Brand.default
+  #    => [#<Tangocard::Brand:0x007f9a6f9d3030 ...>, #<Tangocard::Brand:0x007f9a6f9d3030 ...>, ...]
+  #
+  # Arguments:
+  #   none
+  def self.default
+    self.all.select{|b| Tangocard.configuration.default_brands.include?(b.description)}
+  end
+
   def initialize(params)
     @description = params['description']
     @image_url = params['image_url']
