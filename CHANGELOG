@@ -6,3 +6,4 @@
 2.0.0: Performance improvements
 4.1.0: Update to use new Funding API (old `fund!` method is still present, but deprecated)
 5.0.0: Major update, switch to v1.1 API, backward incompatible
+6.0.0: Return Tangocard::Response object instead of simple hash or raising exception when possible. Backward incompatible change.
