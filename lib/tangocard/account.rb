@@ -75,7 +75,7 @@ class Tangocard::Account
   # Raises Tango::AccountRegisterCreditCardFailedException on failure.
   # Example:
   #   >> account.register_credit_card('128.128.128.128', Hash (see example below))
-  #    => {"success"=>true, "cc_token"=>"33041234", "active_date"=>1439286111}
+  #    => #<Tangocard::Response:0x007f9a6fec0138 ...>
   #
   # Arguments:
   #   client_ip: (String)
@@ -108,19 +108,13 @@ class Tangocard::Account
     }
 
     response = Tangocard::Raas.register_credit_card(params)
-    if response.success?
-      @cc_token = response.parsed_response['cc_token']
-      response.parsed_response
-    else
-      raise Tangocard::AccountRegisterCreditCardFailedException, "#{response.error_message} #{response.denial_message} #{response.invalid_inputs}"
-    end
   end
 
   # Add funds to the account.
   # Raises Tangocard::AccountFundFailedException on failure.
   # Example:
   #   >> account.cc_fund(5000, '128.128.128.128', '12345678', '123')
-  #    => {"success"=>true, "fund_id"=>"RF13-09261098-12", "amount"=>5000}
+  #    => #<Tangocard::Response:0x007f9a6fec0138 ...>
 
   # Arguments:
   #   amount: (Integer)
@@ -150,19 +144,14 @@ class Tangocard::Account
         'security_code' => security_code
     }
 
-    response = Tangocard::Raas.cc_fund_account(params)
-    if response.success?
-      response.parsed_response
-    else
-      raise Tangocard::AccountFundFailedException, "#{response.error_message} #{response.denial_message} #{response.invalid_inputs}"
-    end
+    Tangocard::Raas.cc_fund_account(params)
   end
 
   # Delete a credit card from an account
   # Raises Tangocard::AccountDeleteCreditCardFailedException failure.
   # Example:
   #   >> account.delete_credit_card("12345678")
-  #    => {"success"=>true, "message": "This card is no longer present in the system"}
+  #    => #<Tangocard::Response:0x007f9a6fec0138 ...>
 
   # Arguments:
   #   cc_token: (String)
@@ -173,12 +162,7 @@ class Tangocard::Account
       'account_identifier' => identifier
     }
 
-    response = Tangocard::Raas.delete_credit_card(params)
-    if response.success?
-      response.parsed_response
-    else
-      raise Tangocard::AccountDeleteCreditCardFailedException, "#{response.error_message}"
-    end
+    Tangocard::Raas.delete_credit_card(params)
   end
 
 end

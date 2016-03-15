@@ -11,11 +11,15 @@ class Tangocard::Response
   end
 
   def error_message
-    parsed_response['error_message'] rescue 'UNKNOWN ERROR'
+    parsed_response['error_message'] rescue 'UNKNOWN ERROR MESSAGE'
   end
 
   def denial_message
-    parsed_response['denial_message'] rescue 'UNKNOWN ERROR'
+    parsed_response['denial_message'] rescue 'UNKNOWN DENIAL MESSSAGE'
+  end
+
+  def denial_code
+    parsed_response['denial_code'] rescue 'UNKNOWN DENIAL CODE'
   end
 
   def invalid_inputs
