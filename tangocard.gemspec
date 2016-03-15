@@ -19,6 +19,6 @@ Gem::Specification.new do |s|
   s.add_dependency 'httparty', '~> 0.11'
   s.add_dependency 'money', '~> 6.1'
   s.add_dependency 'i18n', '~> 0.7'
-  s.add_development_dependency 'rspec', '~> 2.14.1'
+  s.add_development_dependency 'rspec', '~> 2.14'
   s.add_development_dependency 'rr', '~> 0'
 end

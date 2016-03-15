@@ -33,7 +33,7 @@ PLATFORMS
 
 DEPENDENCIES
   rr (~> 0)
-  rspec (~> 2.14.1)
+  rspec (~> 2.14)
   tangocard!
 
 BUNDLED WITH
