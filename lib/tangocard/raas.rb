@@ -1,6 +1,8 @@
 class Tangocard::Raas
   include HTTParty
 
+  @@rewards_response_expires_at = 0
+
   # Create a new account. Returns Tangocard::Response object.
   #
   # Example:
@@ -71,7 +73,11 @@ class Tangocard::Raas
   #   none
   def self.rewards_index
     if Tangocard.configuration.use_cache
+      clear_cache! if cache_expired?
+
       @@rewards_response ||= Tangocard::Response.new(get(endpoint + '/rewards', basic_auth_param))
+      @@rewards_response_expires_at = (Time.now.to_i + Tangocard.configuration.cache_ttl) if cache_expired?
+      @@rewards_response
     else
       Tangocard::Response.new(get(endpoint + '/rewards', basic_auth_param))
     end
@@ -123,12 +129,21 @@ class Tangocard::Raas
 
   def self.clear_cache!
     @@rewards_response = nil
+    @@rewards_response_expires_at = 0
   end
 
   private
 
   def self.basic_auth_param
     {:basic_auth => {:username => Tangocard.configuration.name, :password => Tangocard.configuration.key}}
+  end
+
+  def self.use_cache_ttl?
+    Tangocard.configuration.use_cache && Tangocard.configuration.cache_ttl > 0
+  end
+
+  def self.cache_expired?
+    use_cache_ttl? && @@rewards_response_expires_at < Time.now.to_i
   end
 
   def self.endpoint
