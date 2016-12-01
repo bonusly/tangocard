@@ -20,7 +20,7 @@ module Tangocard
   end
 
   def self.configuration
-    @configuration ||=  Configuration.new
+    @configuration ||= Configuration.new
   end
 
   def self.configure
@@ -40,5 +40,7 @@ require 'tangocard/brand'
 require 'tangocard/order'
 require 'tangocard/order_create_failed_exception'
 require 'tangocard/order_not_found_exception'
+require 'tangocard/raas_exception'
 require 'tangocard/reward'
 require 'tangocard/exchange_rate'
+

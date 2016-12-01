@@ -22,7 +22,9 @@ class Tangocard::Brand
   # Arguments:
   #   none
   def self.all
-    Tangocard::Raas.rewards_index.parsed_response['brands'].map{|p| Tangocard::Brand.new(p)}
+    rewards_index = Tangocard::Raas.rewards_index
+    raise Tangocard::RaasException.new("Tangocard error with response code #{rewards_index.code}") unless rewards_index.success?
+    rewards_index.parsed_response['brands'].map{|p| Tangocard::Brand.new(p)}
   end
 
   # Find a brand by its :description field.

@@ -7,22 +7,28 @@ class Tangocard::Response
   end
 
   def success?
-    parsed_response['success'] rescue false
+    safe_response['success'] || false
   end
 
   def error_message
-    parsed_response['error_message'] rescue 'UNKNOWN ERROR MESSAGE'
+    safe_response['error_message']
   end
 
   def denial_message
-    parsed_response['denial_message'] rescue 'UNKNOWN DENIAL MESSSAGE'
+    safe_response['denial_message']
   end
 
   def denial_code
-    parsed_response['denial_code'] rescue 'UNKNOWN DENIAL CODE'
+    safe_response['denial_code']
   end
 
   def invalid_inputs
-    parsed_response['invalid_inputs'] rescue 'UNKNOWN INVALID INPUTS'
+    safe_response['invalid_inputs']
+  end
+
+  private
+
+  def safe_response
+    parsed_response || {}
   end
 end

@@ -12,7 +12,7 @@ class Tangocard::Raas
   # Arguments:
   #   params: (Hash - see https://www.tangocard.com/docs/raas-api/#create-account for details)
   def self.create_account(params)
-    Tangocard::Response.new(post(endpoint + '/accounts', {:body => params.to_json}.merge(basic_auth_param)))
+    Tangocard::Response.new(post_request('/accounts', { body: params.to_json }))
   end
 
   # Gets account details. Returns Tangocard::Response object.
@@ -24,7 +24,7 @@ class Tangocard::Raas
   # Arguments:
   #   params: (Hash - see https://www.tangocard.com/docs/raas-api/#get-account for details)
   def self.show_account(params)
-    Tangocard::Response.new(get(endpoint + "/accounts/#{params['customer']}/#{params['identifier']}", basic_auth_param))
+    Tangocard::Response.new(get_request("/accounts/#{params['customer']}/#{params['identifier']}"))
   end
 
   # Funds an account. Returns Tangocard::Response object.
@@ -36,7 +36,7 @@ class Tangocard::Raas
   # Arguments:
   #   params: (Hash - see https://www.tangocard.com/docs/raas-api/#create-cc-fund for details)
   def self.cc_fund_account(params)
-    Tangocard::Response.new(post(endpoint + '/cc_fund', {:body => params.to_json}.merge(basic_auth_param)))
+    Tangocard::Response.new(post_request('/cc_fund', { body: params.to_json }))
   end
 
   # Registers a credit card to an account. Returns Tangocard::Response object.
@@ -48,7 +48,7 @@ class Tangocard::Raas
   # Arguments:
   #   params: (Hash - see https://www.tangocard.com/docs/raas-api/#create-cc-registration for details)
   def self.register_credit_card(params)
-    Tangocard::Response.new(post(endpoint + '/cc_register', {:body => params.to_json}.merge(basic_auth_param)))
+    Tangocard::Response.new(post_request('/cc_register', { body: params.to_json }))
   end
 
   # Deletes a credit card from an account. Returns Tangocard::Response object.
@@ -60,7 +60,7 @@ class Tangocard::Raas
   # Arguments:
   #   params: (Hash - see https://www.tangocard.com/docs/raas-api/#create-cc-un-registration for details)
   def self.delete_credit_card(params)
-    Tangocard::Response.new(post(endpoint + '/cc_unregister', {:body => params.to_json}.merge(basic_auth_param)))
+    Tangocard::Response.new(post_request('/cc_unregister', { body: params.to_json }))
   end
 
   # Retrieve all rewards. Returns Tangocard::Response object.
@@ -75,11 +75,11 @@ class Tangocard::Raas
     if Tangocard.configuration.use_cache
       clear_cache! if cache_expired?
 
-      @@rewards_response ||= Tangocard::Response.new(get(endpoint + '/rewards', basic_auth_param))
+      @@rewards_response ||= Tangocard::Response.new(get_request('/rewards'))
       @@rewards_response_expires_at = (Time.now.to_i + Tangocard.configuration.cache_ttl) if cache_expired?
       @@rewards_response
     else
-      Tangocard::Response.new(get(endpoint + '/rewards', basic_auth_param))
+      Tangocard::Response.new(get_request('/rewards'))
     end
   end
 
@@ -92,7 +92,7 @@ class Tangocard::Raas
   # Arguments:
   #   params: (Hash - see https://www.tangocard.com/docs/raas-api/#create-order for details)
   def self.create_order(params)
-    Tangocard::Response.new(post(endpoint + '/orders', {:body => params.to_json}.merge(basic_auth_param)))
+    Tangocard::Response.new(post_request('/orders', { body: params.to_json }))
   end
 
   # Get order details. Returns Tangocard::Response object.
@@ -104,7 +104,7 @@ class Tangocard::Raas
   # Arguments:
   #   params: (Hash - see https://www.tangocard.com/docs/raas-api/#get-order for details)
   def self.show_order(params)
-    Tangocard::Response.new(get(endpoint + "/orders/#{params['order_id']}", basic_auth_param))
+    Tangocard::Response.new(get_request("/orders/#{params['order_id']}"))
   end
 
   # Retrieve a list of historical orders. Returns Tangocard::Response object.
@@ -119,12 +119,12 @@ class Tangocard::Raas
     query_string = ""
     if params.any?
       query_string = "?"
-      params.keys.each_with_index do |k,i|
+      params.keys.each_with_index do |k, i|
         query_string += "&" unless i == 0
         query_string += "#{k}=#{params[k]}"
       end
     end
-    Tangocard::Response.new(get(endpoint + "/orders#{query_string}", basic_auth_param))
+    Tangocard::Response.new(get_request("/orders#{query_string}"))
   end
 
   def self.clear_cache!
@@ -135,7 +135,7 @@ class Tangocard::Raas
   private
 
   def self.basic_auth_param
-    {:basic_auth => {:username => Tangocard.configuration.name, :password => Tangocard.configuration.key}}
+    { basic_auth: { username: Tangocard.configuration.name, password: Tangocard.configuration.key } }
   end
 
   def self.use_cache_ttl?
@@ -147,6 +147,14 @@ class Tangocard::Raas
   end
 
   def self.endpoint
-    Tangocard.configuration.base_uri + '/raas/v1.1'
+    "#{Tangocard.configuration.base_uri}/raas/v1.1"
+  end
+
+  def self.get_request(path)
+    get("#{endpoint}#{path}", basic_auth_param)
+  end
+
+  def self.post_request(path, params)
+    post("#{endpoint}#{path}", basic_auth_param.merge(params))
   end
 end

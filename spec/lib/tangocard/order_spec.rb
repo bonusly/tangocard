@@ -10,13 +10,13 @@ describe Tangocard::Order do
       let(:fail_response) { sample_order_index_response(false) }
 
       it 'should return an array of Tangocard::Order objects if successful' do
-        mock(Tangocard::Raas).orders_index(params) { success_response }
-        mock(Tangocard::Order).new(success_response.parsed_response['orders'].first) { true }
+        expect(Tangocard::Raas).to receive(:orders_index).with(params) { success_response }
+        expect(Tangocard::Order).to receive(:new).with(success_response.parsed_response['orders'].first) { true }
         Tangocard::Order.all(params).should == [true]
       end
 
       it 'should return an empty array if unsuccessful' do
-        mock(Tangocard::Raas).orders_index(params) { fail_response }
+        expect(Tangocard::Raas).to receive(:orders_index).with(params) { fail_response }
         Tangocard::Order.all(params).should == []
       end
     end
@@ -27,13 +27,13 @@ describe Tangocard::Order do
       let(:fail_response) { sample_find_order_response(false) }
 
       it 'should return a Tangocard::Order object if successful' do
-        mock(Tangocard::Raas).show_order({'order_id' => order_id}) { success_response }
-        mock(Tangocard::Order).new(success_response.parsed_response['order'], success_response) { true }
-        Tangocard::Order.find(order_id).should be_true
+        expect(Tangocard::Raas).to receive(:show_order).with({'order_id' => order_id}) { success_response }
+        expect(Tangocard::Order).to receive(:new).with(success_response.parsed_response['order'], success_response) { true }
+        expect(Tangocard::Order.find(order_id)).to be true
       end
 
       it 'should throw a Tangocard::OrderNotFoundException if failed' do
-        mock(Tangocard::Raas).show_order({'order_id' => order_id}) { fail_response }
+        expect(Tangocard::Raas).to receive(:show_order).with({'order_id' => order_id}) { fail_response }
         lambda{ Tangocard::Order.find(order_id) }.should raise_error(Tangocard::OrderNotFoundException)
       end
     end
@@ -44,13 +44,13 @@ describe Tangocard::Order do
       let(:fail_response) { sample_create_order_response(false) }
 
       it 'should return at Tangocard::Order object if successful' do
-        mock(Tangocard::Raas).create_order(params) { success_response }
-        mock(Tangocard::Order).new(success_response.parsed_response['order'], success_response) { true }
-        Tangocard::Order.create(params).should be_true
+        expect(Tangocard::Raas).to receive(:create_order).with(params) { success_response }
+        expect(Tangocard::Order).to receive(:new).with(success_response.parsed_response['order'], success_response) { true }
+        expect(Tangocard::Order.create(params)).to be true
       end
 
       it 'should throw a Tangocard::OrderCreateFailedException if failed' do
-        mock(Tangocard::Raas).create_order(params) { fail_response }
+        expect(Tangocard::Raas).to receive(:create_order).with(params) { fail_response }
         lambda{ Tangocard::Order.create(params) }.should raise_error(Tangocard::OrderCreateFailedException)
       end
     end
@@ -61,19 +61,19 @@ describe Tangocard::Order do
       let(:params) { Object.new }
 
       it 'should set the attributes on the object' do
-        mock(params).[]('order_id') { 'order_id' }
-        mock(params).[]('account_identifier') { 'account_identifier' }
-        mock(params).[]('customer') { 'customer' }
-        mock(params).[]('sku') { 'sku' }
-        mock(params).[]('denomination') { 'denomination' }
-        mock(params).[]('amount_charged') { 'amount_charged' }
-        mock(params).[]('reward_message') { 'reward_message' }
-        mock(params).[]('reward_subject') { 'reward_subject' }
-        mock(params).[]('reward_from') { 'reward_from' }
-        mock(params).[]('delivered_at') { 'delivered_at' }
-        mock(params).[]('recipient') { 'recipient' }
-        mock(params).[]('external_id') { 'recipient' }
-        mock(params).[]('reward') { 'reward' }
+        expect(params).to receive(:[]).with('order_id') { 'order_id' }
+        expect(params).to receive(:[]).with('account_identifier') { 'account_identifier' }
+        expect(params).to receive(:[]).with('customer') { 'customer' }
+        expect(params).to receive(:[]).with('sku') { 'sku' }
+        expect(params).to receive(:[]).with('denomination') { 'denomination' }
+        expect(params).to receive(:[]).with('amount_charged') { 'amount_charged' }
+        expect(params).to receive(:[]).with('reward_message') { 'reward_message' }
+        expect(params).to receive(:[]).with('reward_subject') { 'reward_subject' }
+        expect(params).to receive(:[]).with('reward_from') { 'reward_from' }
+        expect(params).to receive(:[]).with('delivered_at') { 'delivered_at' }
+        expect(params).to receive(:[]).with('recipient') { 'recipient' }
+        expect(params).to receive(:[]).with('external_id') { 'recipient' }
+        expect(params).to receive(:[]).with('reward') { 'reward' }
 
         Tangocard::Order.send(:new, params)
       end

@@ -20,7 +20,7 @@ describe Tangocard::Account do
   let(:delete_credit_card_params) { {'cc_token' => cc_token, 'customer' => 'bonusly', 'account_identifier' => 'test1'} }
 
   before do
-    mock(Tangocard::Raas).show_account(find_params) { account_response }
+    expect(Tangocard::Raas).to receive(:show_account).with(find_params) { account_response }
     @account = Tangocard::Account.find(customer, identifier)
   end
 
@@ -30,11 +30,11 @@ describe Tangocard::Account do
         let(:response) { sample_find_account_response(true) }
 
         before do
-          mock(Tangocard::Raas).show_account(find_params) { response }
+          expect(Tangocard::Raas).to receive(:show_account).with(find_params) { response }
         end
 
         it 'should find the account' do
-          mock(Tangocard::Account).new(response.parsed_response['account']) { true }
+          expect(Tangocard::Account).to receive(:new).with(response.parsed_response['account']) { true }
           lambda{ Tangocard::Account.find(customer, identifier) }.should_not raise_error
         end
       end
@@ -43,7 +43,7 @@ describe Tangocard::Account do
         let(:response) { sample_find_account_response(false) }
 
         before do
-          mock(Tangocard::Raas).show_account(find_params) { response }
+          expect(Tangocard::Raas).to receive(:show_account).with(find_params) { response }
         end
 
         it 'should throw an exception' do
@@ -57,11 +57,11 @@ describe Tangocard::Account do
         let(:response) { sample_create_account_response(true) }
 
         before do
-          mock(Tangocard::Raas).create_account(create_params) { response }
+          expect(Tangocard::Raas).to receive(:create_account).with(create_params) { response }
         end
 
         it 'should create the account and initialize an account object' do
-          mock(Tangocard::Account).new(response.parsed_response['account']) { true }
+          expect(Tangocard::Account).to receive(:new).with(response.parsed_response['account']) { true }
           lambda{ Tangocard::Account.create(customer, identifier, email) }.should_not raise_error
         end
       end
@@ -70,7 +70,7 @@ describe Tangocard::Account do
         let(:response) { sample_create_account_response(false) }
 
         before do
-          mock(Tangocard::Raas).create_account(create_params) { response }
+          expect(Tangocard::Raas).to receive(:create_account).with(create_params) { response }
         end
 
         it 'should throw an exception' do
@@ -81,16 +81,16 @@ describe Tangocard::Account do
 
     describe 'self.find_or_create' do
       it 'should find the customer' do
-        mock(Tangocard::Account).find(customer, identifier) { true }
-        Tangocard::Account.find_or_create(customer, identifier, email).should be_true
+        expect(Tangocard::Account).to receive(:find).with(customer, identifier) { true }
+        Tangocard::Account.find_or_create(customer, identifier, email).should be true
       end
 
       it 'should create the customer if find fails' do
-        mock(Tangocard::Account).find(customer, identifier) do
+        expect(Tangocard::Account).to receive(:find).with(customer, identifier) do
           raise Tangocard::AccountNotFoundException, 'Tangocard - Error finding account:'
         end
-        mock(Tangocard::Account).create(customer, identifier, email) { true }
-        Tangocard::Account.find_or_create(customer, identifier, email).should be_true
+        expect(Tangocard::Account).to receive(:create).with(customer, identifier, email) { true }
+        Tangocard::Account.find_or_create(customer, identifier, email).should be true
       end
     end
   end
@@ -104,18 +104,18 @@ describe Tangocard::Account do
       let(:params) { Object.new }
 
       it 'should initialize ivars from the parameters' do
-        mock(params).[]('customer') { customer }
-        mock(params).[]('email') { email }
-        mock(params).[]('identifier') { identifier }
-        mock(params).[]('available_balance') { available_balance }
-        mock(available_balance).to_i { 1 }
+        expect(params).to receive(:[]).with('customer') { customer }
+        expect(params).to receive(:[]).with('email') { email }
+        expect(params).to receive(:[]).with('identifier') { identifier }
+        expect(params).to receive(:[]).with('available_balance') { available_balance }
+        expect(available_balance).to receive(:to_i) { 1 }
         Tangocard::Account.send(:new, params)
       end
     end
 
     describe 'register_credit_card' do
       before do
-        mock(Tangocard::Raas).register_credit_card(register_credit_card_params) { response }
+        expect(Tangocard::Raas).to receive(:register_credit_card).with(register_credit_card_params) { response }
       end
 
       context 'register_credit_card succeeds' do
@@ -124,7 +124,7 @@ describe Tangocard::Account do
         it 'should register the credit card' do
           response = @account.register_credit_card(client_ip, credit_card)
           response.should be_success
-          response.parsed_response['cc_token'].should == '33041234'
+          expect(response.parsed_response['cc_token']).to eq '33041234'
         end
       end
 
@@ -133,16 +133,16 @@ describe Tangocard::Account do
 
         it 'return a Tangocard::Response with success? == false' do
           response = @account.register_credit_card(client_ip, credit_card)
-          response.should_not be_success
-          response.denial_code.should_not be_nil
-          response.denial_message.should_not be_nil
+          expect(response.success?).to be false
+          expect(response.denial_code).not_to be nil
+          expect(response.denial_message).not_to be nil
         end
       end
     end
 
     describe 'cc_fund' do
       before do
-        mock(Tangocard::Raas).cc_fund_account(fund_params) { response }
+        expect(Tangocard::Raas).to receive(:cc_fund_account).with(fund_params) { response }
       end
 
       context 'cc_fund succeeds' do
@@ -159,16 +159,16 @@ describe Tangocard::Account do
 
         it 'return a Tangocard::Response with success? == false' do
           response = @account.cc_fund(amount, client_ip, cc_token, security_code)
-          response.should_not be_success
-          response.error_message.should_not be_nil
-          response.invalid_inputs.should_not be_nil
+          expect(response.success?).to be false
+          expect(response.error_message).not_to be nil
+          expect(response.invalid_inputs).not_to be nil
         end
       end
     end
 
     describe 'delete_credit_card' do
       before do
-        mock(Tangocard::Raas).delete_credit_card(delete_credit_card_params) { response }
+        expect(Tangocard::Raas).to receive(:delete_credit_card).with(delete_credit_card_params) { response }
       end
 
       context 'delete_credit_card succeeds' do
@@ -184,8 +184,8 @@ describe Tangocard::Account do
 
         it 'return a Tangocard::Response with success? == false' do
           response = @account.delete_credit_card(cc_token)
-          response.should_not be_success
-          response.error_message.should_not be_nil
+          expect(response.success?).to be false
+          expect(response.error_message).not_to be nil
         end
       end
     end
