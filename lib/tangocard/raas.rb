@@ -71,7 +71,9 @@ class Tangocard::Raas
   #   none
   def self.rewards_index(use_cache: true)
     if Tangocard.configuration.use_cache && use_cache
-      Tangocard.configuration.cache.read("#{Tangocard::CACHE_PREFIX}rewards_index")
+      cached_response = Tangocard.configuration.cache.read("#{Tangocard::CACHE_PREFIX}rewards_index")
+      raise Tangocard::RaasException.new('Tangocard cache is not primed. Either configure the gem to run without caching or warm the cache before calling cached endpoints') if cached_response.nil?
+      cached_response
     else
       Tangocard::Response.new(get_request('/rewards'))
     end
