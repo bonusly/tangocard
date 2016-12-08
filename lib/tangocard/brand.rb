@@ -1,18 +1,6 @@
 class Tangocard::Brand
   attr_reader :description, :rewards
 
-  # Clear all cached responses. Next request for brand info will pull fresh from the Tango Card API.
-  #
-  # Example:
-  #   >> Tangocard::Brand.clear_cache!
-  #    => true
-  #
-  # Arguments:
-  #   none
-  def self.clear_cache!
-    Tangocard::Raas.clear_cache!
-  end
-
   # Return an array of all brands.
   #
   # Example:

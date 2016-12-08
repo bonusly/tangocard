@@ -10,14 +10,6 @@ describe Tangocard::Brand do
       allow(Tangocard::Raas).to receive(:rewards_index) { rewards_index }
     end
 
-    describe 'self.clear_cache!' do
-
-      it 'should call Tangocard::Raas.clear_cache!' do
-        expect(Tangocard::Raas).to receive(:clear_cache!) { true }
-        Tangocard::Brand.clear_cache!
-      end
-    end
-
     describe 'self.all' do
       context 'Tangocard is behaving' do
         it 'should return an array of Tangocard::Brand objects' do

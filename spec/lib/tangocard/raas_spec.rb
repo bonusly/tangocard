@@ -13,6 +13,7 @@ describe Tangocard::Raas do
     Tangocard.configure do |c|
       c.name = name
       c.key = key
+      c.use_cache = false
     end
   end
 
@@ -75,61 +76,23 @@ describe Tangocard::Raas do
     end
 
     describe 'self.rewards_index' do
-      before do
-        Tangocard::Raas.class_variable_set :@@rewards_response, nil
-        Tangocard::Raas.class_variable_set :@@rewards_response_expires_at, 0
-      end
-
       context 'use_cache == true' do
+
         before do
+          expect(Tangocard::Raas).to receive(:get_request).with('/rewards') { raw_response }
+
           Tangocard.configure do |c|
             c.use_cache = true
           end
         end
 
-        context 'cache_ttl == 0' do
-          before do
-            Tangocard.configure do |c|
-              c.cache_ttl = 0
-            end
-          end
-
-          it 'should do the GET request once, then hit cache' do
-            expect(Tangocard::Raas).to receive(:get_request).with('/rewards').twice { raw_response }
-            expect(Tangocard::Raas.rewards_index.parsed_response).to eq response
-            expect(Tangocard::Raas.rewards_index.parsed_response).to eq response
-            Tangocard::Raas.clear_cache!
-            expect(Tangocard::Raas.rewards_index.parsed_response).to eq response
-            expect(Tangocard::Raas.rewards_index.parsed_response).to eq response
-          end
+        it 'should not do any get requests if the cache is warm' do
+          expect(Tangocard::Raas).not_to receive(:get_request).with('/rewards')
+          Tangocard::Raas.rewards_index
         end
-
-        context 'cache_ttl > 0' do
-          before do
-            Tangocard.configure do |c|
-              c.cache_ttl = 3600
-            end
-          end
-
-          it 'should do GET requests only if cache expired' do
-            expect(Tangocard::Raas).to receive(:get_request).with('/rewards').twice { raw_response }
-            expect(Tangocard::Raas.rewards_index.parsed_response).to eq response
-            expect(Tangocard::Raas.rewards_index.parsed_response).to eq response
-            Tangocard::Raas.class_variable_set :@@rewards_response_expires_at, 0
-            expect(Tangocard::Raas.rewards_index.parsed_response).to eq response
-            expect(Tangocard::Raas.rewards_index.parsed_response).to eq response
-          end
-        end
-
       end
 
       context 'use_cache == false' do
-        before do
-          Tangocard.configure do |c|
-            c.use_cache = false
-          end
-        end
-
         it 'should do the GET request once, then hit cache' do
           expect(Tangocard::Raas).to receive(:get_request).with('/rewards').twice { raw_response }
           expect(Tangocard::Raas.rewards_index.parsed_response).to eq response

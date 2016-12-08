@@ -4,12 +4,6 @@ describe Tangocard::ExchangeRate do
   include TangocardHelpers
 
   describe 'class methods' do
-    describe 'self.clear_cache!' do
-      it 'should call Tangocard::Raas.clear_cache!' do
-        expect(Tangocard::Raas).to receive(:clear_cache!) { true }
-        Tangocard::Brand.clear_cache!
-      end
-    end
 
     describe 'self.timestamp' do
       before do

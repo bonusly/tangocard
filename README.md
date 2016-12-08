@@ -44,8 +44,9 @@ There are also optional configuration parameters:
  * `default_brands` - An array of strings for the brands you want to retrieve with `Tangocard::Brand.default`. The strings should match the unique brand `description` fields exactly.
  * `local_images` - An array of local image names/URIs that you want to display instead of the default Tango Card-provided `image_url`. `image_url` is sometimes blank, so this can be handy in those cases.
  * `sku_blacklist` - Reward SKUs that are blacklisted, ie. should never be returned as a purchasable reward.
- * `use_cache` - Use cache for Tangocard::Brand queries, defaults to `true`.
- * `cache_ttl` - Cache time-to-Live in seconds, only effective if `use_cache` is enabled. Default is `0` (cache never expires).
+ * `use_cache` - Use cache for Tangocard::Brand queries, defaults to `true`. The cache can be refreshed by calling `Tangocard.warm_cache`
+ * `cache` - Which cache to use, defaults to `ActiveSupport::Cache::MemoryStore`. Using an out-of-process cache e.g. hosted memcache will improve performance and stability.
+ * `logger` - i.e. `Rails.logger`
 
 ## Getting Started
 

@@ -1,18 +1,6 @@
 class Tangocard::ExchangeRate
   attr_reader :currency_code, :rate
 
-  # Clear all cached responses. Next request for exchange rate info will pull fresh from the Tango Card API.
-  #
-  # Example:
-  #   >> Tangocard::ExchangeRate.clear_cache!
-  #    => true
-  #
-  # Arguments:
-  #   none
-  def self.clear_cache!
-    Tangocard::Raas.clear_cache!
-  end
-
   # Return current currency exchange rate timestamp.
   #
   # Example:
