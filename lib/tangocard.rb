@@ -3,6 +3,7 @@ require 'money'
 require 'ostruct'
 require 'active_support'
 require 'active_support/cache/memory_store'
+require 'tangocard/version'
 
 module Tangocard
 
@@ -55,4 +56,3 @@ require 'tangocard/order_not_found_exception'
 require 'tangocard/raas_exception'
 require 'tangocard/reward'
 require 'tangocard/exchange_rate'
-require 'tangocard/version'
